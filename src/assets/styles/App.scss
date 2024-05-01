@@ -5,6 +5,10 @@ img{
     box-sizing: border-box;
 }
 
+.solid--hover:hover{
+    color: orange;
+}
+
 .app-header{
     height: 10vh;
     min-height: 50px;
@@ -51,5 +55,28 @@ img{
             column-gap: 10px;
             cursor: pointer;
         }
+
+        &__cart{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+
+            .badge{
+                position: absolute;
+                top: -5px;
+                right: -15px;
+                background-color: orange;
+                color: white !important;
+                width: 20px;
+                height: 20px;
+                border-radius: 20px 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
     }
 }
