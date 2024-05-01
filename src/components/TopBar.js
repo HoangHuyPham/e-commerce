@@ -10,7 +10,7 @@ class TopBar extends React.Component{
             balance:0
         }
     }
-    
+
     constructor(props){
         super(props)
     }
@@ -18,7 +18,7 @@ class TopBar extends React.Component{
     render(){
 
         let {cart} = this.state
-        let {user} = this.state
+        let user = null
       
         return (
             <div className="top-bar">
@@ -30,15 +30,20 @@ class TopBar extends React.Component{
 
                 <div className="top-bar__cart solid--hover">
                     <div className="icon"><i className="fa-solid fa-cart-shopping"></i></div>
-                    <div className="name">Cart</div>
+                    <label>Cart</label>
                     {(cart > 0 && cart < 10)?<div className="badge">{cart}</div>:<div className="badge">9+</div>}
                 </div>
 
                 {
-                    user && 
+                    user?
                     <div className="top-bar__user solid--hover">
                         <div className="icon"><i className="fa-solid fa-user"></i></div>
-                        <div className="name">{user.name}</div>
+                        <label>{user.name}</label>
+                        <i className="fa-solid fa-caret-down"></i>
+                    </div>:
+                    <div className="top-bar__signin-signup">
+                        <div className="btn">Sign in <i className="fa-solid fa-right-from-bracket"></i></div>
+                        <div className="btn btn--signup">Sign up <i className="fa-solid fa-user-plus"></i></div>
                     </div>
                 }
             </div>

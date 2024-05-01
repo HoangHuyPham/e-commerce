@@ -9,8 +9,20 @@ img{
     color: orange;
 }
 
+.btn{
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+
+    &--signup{
+        color: orange;
+    }
+}
+
 .app-header{
     height: 10vh;
+    width: 100%;
     min-height: 50px;
     background-color: black;
 
@@ -23,6 +35,13 @@ img{
         margin: 0 auto;
         display: flex;
         color: white;
+
+        &__signin-signup{
+            margin-left: 20px;
+            display: flex;
+            column-gap: 10px;
+        }
+
         &__item{
             display: block;
             height: 100%;
