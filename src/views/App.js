@@ -1,13 +1,14 @@
 import '../assets/styles/App.scss';
-import Navigator from '../components/TopBar';
+import SlideShow from '../components/SlideShow';
+import TopBar from '../components/TopBar';
+import WatchList from '../components/WatchList';
 
 function App() {
   return (
-    <div className="app">
-      <header className="app-header">
-        <Navigator />
-        
-      </header>
+    <div className="App">
+      <TopBar/>
+      <SlideShow/>
+      <WatchList/>
     </div>
   );
 }

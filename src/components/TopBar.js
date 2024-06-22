@@ -1,54 +1,45 @@
 import React, { Component } from "react";
-import logo from '../assets/images/logo.png';
+import logo from "../assets/images/logo.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMagnifyingGlass,
+  faCartShopping,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { Button } from "react-bootstrap";
 
-class TopBar extends React.Component{
-    state = {
-        cart:5,
-        user:{
-            id:123,
-            name:"Nguyen Van A",
-            balance:0
-        }
-    }
+class TopBar extends Component {
+  render() {
+    return (
+      <div className="TopBar">
+        <img src={logo} alt="logo" />
+        <section className="SearchBar">
+          <input
+            className="SearchInput"
+            placeholder="Nhập sản phẩm bạn muốn tìm"
+          />
+          <button className="SearchBtn">
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+        </section>
 
-    constructor(props){
-        super(props)
-    }
- 
-    render(){
+        <section className="Misc">
+          <FontAwesomeIcon className="Cart" icon={faCartShopping} />
+          <FontAwesomeIcon className="Fav" icon={faHeart} />
+        </section>
 
-        let {cart} = this.state
-        let user = null
-      
-        return (
-            <div className="top-bar">
-                <a className="top-bar__item"><img src={logo} className="app-header__logo" alt="logo" /></a>
-                <div className="top-bar__search-bar-wrapper">
-                    <input placeholder="Search..." type="text" className="search-bar"></input>
-                    <button className="search-button"><i className="fa-solid fa-search"></i></button>
-                </div>
+        <section className="Login">
+          <Button className="SigninBtn" variant="primary">
+            Đăng nhập
+          </Button>
+          <Button className="SignOutBtn" variant="danger">
+            Đăng kí
+          </Button>
+        </section>
 
-                <div className="top-bar__cart solid--hover">
-                    <div className="icon"><i className="fa-solid fa-cart-shopping"></i></div>
-                    <label>Cart</label>
-                    {(cart > 0 && cart < 10)?<div className="badge">{cart}</div>:<div className="badge">9+</div>}
-                </div>
-
-                {
-                    user?
-                    <div className="top-bar__user solid--hover">
-                        <div className="icon"><i className="fa-solid fa-user"></i></div>
-                        <label>{user.name}</label>
-                        <i className="fa-solid fa-caret-down"></i>
-                    </div>:
-                    <div className="top-bar__signin-signup">
-                        <div className="btn">Sign in <i className="fa-solid fa-right-from-bracket"></i></div>
-                        <div className="btn btn--signup">Sign up <i className="fa-solid fa-user-plus"></i></div>
-                    </div>
-                }
-            </div>
-        )
-    }
+      </div>
+    );
+  }
 }
 
-export default TopBar
+export default TopBar;
