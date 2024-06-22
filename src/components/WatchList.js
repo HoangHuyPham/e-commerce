@@ -3,7 +3,6 @@ import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
-  faCartShopping,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
