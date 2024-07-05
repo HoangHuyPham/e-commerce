@@ -44,6 +44,11 @@ class WatchList extends Component {
     
     }
   ];
+
+  handleAddToCart = (params) => {
+    
+  }
+
   render() {
     return (
       <div className="WatchList">

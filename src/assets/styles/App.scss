@@ -104,10 +104,24 @@ body{
         margin: 0 auto 0;
 
         .Title{
+            display: flex;
             align-self: center;
             font-size: 30px;
             text-transform: uppercase;
             font-weight: 500;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            column-gap: 5px;
+
+            &::before, &::after{
+                flex-grow: 2;
+                content: "";
+                height: 1px;
+                width: 20%;
+                display: block;
+                background-color: black;
+            }
         }
         
         .Content{
@@ -154,4 +168,77 @@ body{
 
     }
 
+    .Footer{
+        background-color: black;
+        color: white;
+        width: 100%;
+        padding: 50px 100px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 100px;
+        
+        .FirstLine{
+            display: flex;
+            column-gap: 100px;
+            .Info{
+                width: 30%;
+                font-size: 20px;
+            }
+            .Support, .Util{
+                font-size: 25px;
+                text-transform: uppercase;
+            }
+
+            .Support{
+                ul{
+                    font-size: 20px;
+                    text-transform: none;
+
+                    li{
+                       span{
+                        display: inline-block;
+                        
+                        &:hover{
+                            &::after{
+                                content: "";
+                                display: block;
+                                background-color: white;
+                                height: 2px;
+                                animation: widen ease forwards .3s;
+                            }
+                        }
+                       }
+                    }
+                }
+            }
+        }
+
+        .SecondLine{
+            display: flex; 
+
+            .FollowUs{
+                font-size: 25px;
+                text-transform: uppercase;
+
+                .Social{
+                    display: flex;
+                    column-gap: 5px;
+
+                    a{
+                        text-decoration: none;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@keyframes widen {
+    from{
+        width: 0;
+    }to{
+        width: 100%;
+    }
 }

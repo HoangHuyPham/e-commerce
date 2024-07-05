@@ -25,7 +25,9 @@ class TopBar extends Component {
 
         <section className="Misc">
           <FontAwesomeIcon className="Cart" icon={faCartShopping} />
+          <span className="CartNum">0</span>
           <FontAwesomeIcon className="Fav" icon={faHeart} />
+          <span className="FavNum">0</span>
         </section>
 
         <section className="Login">
