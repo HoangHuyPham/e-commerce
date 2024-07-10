@@ -8,11 +8,13 @@ import {
     RouterProvider,
     createRoutesFromElements,
     Route,
-    Navigate
+    Navigate, Routes
 } from "react-router-dom";
 import Home from "./views/Home";
 import Panel from "./views/Panel";
 import NotFound from "./views/NotFound";
+import WatchList from "./components/WatchList";
+import WatchDetail from "./views/WatchDetail";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -24,6 +26,10 @@ const router = createBrowserRouter(
                 <Route path="panel" element={<Panel />} />
             </Route>
             <Route path="*" element={<NotFound />} />
+
+            <Route path="/" element={<WatchList />} />
+            <Route path="/watch/:id" element={<WatchDetail />} /> {/* Định tuyến trang chi tiết */}
+
         </>
     )
 );

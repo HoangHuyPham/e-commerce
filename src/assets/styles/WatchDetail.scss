@@ -1,0 +1,42 @@
+$primary-color: #333;
+$background-color: #f9f9f9;
+$container-padding: 20px;
+$border-radius: 10px;
+$box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+.watch-detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $container-padding;
+
+  .watch-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    padding: $container-padding;
+    background: $background-color;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: $border-radius;
+      margin-bottom: $container-padding;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: $container-padding;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: $primary-color;
+    }
+  }
+}

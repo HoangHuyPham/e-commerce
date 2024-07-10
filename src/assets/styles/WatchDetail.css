@@ -1,0 +1,34 @@
+.watch-detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.watch-detail-container .watch-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.watch-detail-container .watch-detail img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.watch-detail-container .watch-detail h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+.watch-detail-container .watch-detail p {
+  font-size: 1.2em;
+  color: #333;
+}
+
+/*# sourceMappingURL=WatchDetail.css.map */
