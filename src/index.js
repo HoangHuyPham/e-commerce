@@ -8,11 +8,14 @@ import {
   RouterProvider,
   createRoutesFromElements,
   Route,
-  Navigate
+  Navigate,
 } from "react-router-dom";
 import Home from "./views/Home";
 import Panel from "./views/Panel";
 import NotFound from "./views/NotFound";
+import SignInOut from "./views/SignInUp";
+import SignIn from "./views/SignIn";
+import SignUp from "./views/SignUp";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -23,12 +26,23 @@ const router = createBrowserRouter(
         <Route path="home" element={<Home />} />
         <Route path="panel" element={<Panel />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
+
+      <Route path="/sign" element={<SignInOut />}>
+        <Route index element={<Navigate to="in" />} />
+        <Route path="in" element={<SignIn />} />
+        <Route path="up" element={<SignUp />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />}/>
     </>
   )
 );
 
-root.render(<RouterProvider router={router}></RouterProvider>);
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router}></RouterProvider>
+  </React.StrictMode>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
