@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .watch-detail-container {
   display: flex;
   flex-direction: column;
@@ -29,6 +30,9 @@
 .watch-detail-container .watch-detail p {
   font-size: 1.2em;
   color: #333;
+}
+.watch-detail-container .watch-detail .bottom-buttons button {
+  mảg: 5px;
 }
 
 /*# sourceMappingURL=WatchDetail.css.map */

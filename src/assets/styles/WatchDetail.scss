@@ -1,6 +1,6 @@
 $primary-color: #333;
 $background-color: #f9f9f9;
-$container-padding: 20px;
+$container-padding: 5px;
 $border-radius: 10px;
 $box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
@@ -37,6 +37,11 @@ $box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     p {
       font-size: 1.2em;
       color: $primary-color;
+    }
+    .bottom-buttons {
+      button {
+        margin: 5px;
+      }
     }
   }
 }
