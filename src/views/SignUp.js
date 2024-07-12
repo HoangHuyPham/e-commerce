@@ -57,6 +57,17 @@ function SignUp(props) {
         }
       })
       .catch((err) => {
+        setTimeout(() => {
+          setLoading(false);
+          setDataToast([
+            {
+              id: new Date().getTime(),
+              show: true,
+              info: "Lỗi",
+              content: "Đăng kí thất bại",
+            },
+          ]);
+        }, 100);
         console.log(err);
       });
   };
