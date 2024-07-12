@@ -16,6 +16,7 @@ import NotFound from "./views/NotFound";
 import SignInOut from "./views/SignInUp";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
+import Info from "./views/Info";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -27,21 +28,27 @@ const router = createBrowserRouter(
         <Route path="panel" element={<Panel />} />
       </Route>
 
-      <Route path="/sign" element={<SignInOut />}>
+      <Route path="sign" element={<SignInOut />}>
         <Route index element={<Navigate to="in" />} />
         <Route path="in" element={<SignIn />} />
         <Route path="up" element={<SignUp />} />
       </Route>
 
-      <Route path="*" element={<NotFound />}/>
+      <Route path="info" element={<Info />}>
+        <Route index element={<Navigate to="me" />} />
+        <Route path="me" element={<Info />} />
+        <Route path="up" element={<SignUp />} />
+      </Route>
+      
+      <Route path="*" element={<NotFound />} />
     </>
   )
 );
 
 root.render(
-  <React.StrictMode>
+
     <RouterProvider router={router}></RouterProvider>
-  </React.StrictMode>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

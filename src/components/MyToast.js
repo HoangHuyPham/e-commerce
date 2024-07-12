@@ -1,4 +1,4 @@
-import { faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Toast, ToastContainer } from "react-bootstrap";
@@ -19,7 +19,7 @@ function MyToast({data}) {
       {
         toast && toast.length > 0 && toast.map((v)=>(<Toast key={v.id} bg="dark" onClose={() => handleCloseToast(v.id)} show={v.show} delay={3000} autohide>
         <Toast.Header bg="dark">
-          <FontAwesomeIcon style={{color: "red"}} icon={faXmarkCircle}/>
+          <FontAwesomeIcon style={{color: (!!v.success && "green")|| "red"}} icon={(!!v.success && faCircleCheck)|| faXmarkCircle}/>
           <strong className="me-auto">{v.info}</strong>
           <small></small>
         </Toast.Header>

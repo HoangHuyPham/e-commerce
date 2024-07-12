@@ -22,33 +22,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginController = void 0;
+exports.authMeController = void 0;
 const ResponseStatus_1 = require("../const/ResponseStatus");
 const userService_1 = __importDefault(require("../services/userService"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const loginController = (req, resp) => {
-    var _a, _b;
-    let userName = (_a = req.body) === null || _a === void 0 ? void 0 : _a.userName;
-    let password = (_b = req.body) === null || _b === void 0 ? void 0 : _b.password;
-    userService_1.default.login(userName, password).then((e) => {
+const authMeController = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    let token = (_a = req.headers) === null || _a === void 0 ? void 0 : _a.authorization;
+    let payload = token === null || token === void 0 ? void 0 : token.split(".")[1];
+    let { userName } = JSON.parse(atob(payload));
+    userService_1.default.getAccountInfo(userName).then((e) => {
         if (e) {
-            let expireDate = new Date(new Date().getTime() + 60000 * 30); //30 min
-            // Success
-            let payload = {
-                userName,
-                isAdmin: e.isAdmin,
-                firstName: e.firstName,
-                lastName: e.lastName,
-                iat: expireDate.getTime()
-            };
-            let token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET_KEY, { algorithm: "HS256" });
-            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: { accessToken: token } });
+            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
         }
         else {
             // Failed
@@ -59,5 +58,5 @@ const loginController = (req, resp) => {
         console.log(err);
         resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
     });
-};
-exports.loginController = loginController;
+});
+exports.authMeController = authMeController;

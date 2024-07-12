@@ -7,20 +7,21 @@ dotenv.config()
 
 export const auth = (req:Request, resp:Response, next:any)=>{
     let token = req.headers?.authorization
-
     if (token){
         try {
-            let payload:JwtPayload = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET_KEY as string)
+            let payload:JwtPayload|string = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET_KEY as string)
             // Check token expire
-            if (payload.iat as number <= new Date().getTime()){
+            if (( payload as JwtPayload).iat as number <= new Date().getTime()){
                 resp.json({status: ResponseStatus.EXPIRED_TOKEN, data: {}} as ResponseData)
+                return
             }
-            next()  
         } catch (error) {
             resp.json({status: ResponseStatus.UNAUTHORIZED, data: {}} as ResponseData)
+            return
         }
-        
+        next()  
     }else{
         resp.json({status: ResponseStatus.UNAUTHORIZED, data: {}} as ResponseData)
+        return
     }
 }

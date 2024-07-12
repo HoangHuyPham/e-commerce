@@ -11,5 +11,16 @@ var userService;
                 userName, password
             } });
     };
+    userService.getAccountInfo = (userName) => {
+        return Account_1.Account.findOne({ where: {
+                userName
+            } });
+    };
+    userService.updateAccountById = (id, newAttr) => {
+        return Account_1.Account.update(newAttr, { where: { id } });
+    };
+    userService.changePassword = (userName, oldPassword, newPassword) => {
+        return Account_1.Account.update({ password: newPassword }, { where: { userName, password: oldPassword } });
+    };
 })(userService || (userService = {}));
 exports.default = userService;

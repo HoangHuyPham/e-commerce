@@ -62,7 +62,6 @@ function SignIn(props) {
             },
           ]);
         }, 100);
-        console.log(err);
       });
   };
 

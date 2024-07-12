@@ -26,38 +26,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginController = void 0;
+exports.changePassword = void 0;
 const ResponseStatus_1 = require("../const/ResponseStatus");
 const userService_1 = __importDefault(require("../services/userService"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const loginController = (req, resp) => {
-    var _a, _b;
-    let userName = (_a = req.body) === null || _a === void 0 ? void 0 : _a.userName;
-    let password = (_b = req.body) === null || _b === void 0 ? void 0 : _b.password;
-    userService_1.default.login(userName, password).then((e) => {
+const changePassword = (req, resp) => {
+    let { userName, oldPassword, newPassword } = req.body;
+    if (!userName) {
+        resp.json({ status: ResponseStatus_1.ResponseStatus.INVALID, data: {} });
+        return;
+    }
+    userService_1.default.changePassword(userName, oldPassword, newPassword).then((e) => {
         if (e) {
-            let expireDate = new Date(new Date().getTime() + 60000 * 30); //30 min
-            // Success
-            let payload = {
-                userName,
-                isAdmin: e.isAdmin,
-                firstName: e.firstName,
-                lastName: e.lastName,
-                iat: expireDate.getTime()
-            };
-            let token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET_KEY, { algorithm: "HS256" });
-            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: { accessToken: token } });
+            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
+            return;
         }
         else {
             // Failed
             resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+            return;
         }
     }).catch(err => {
         // Error
-        console.log(err);
-        resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
+        console.log("changePass>>", err);
+        resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
     });
 };
-exports.loginController = loginController;
+exports.changePassword = changePassword;

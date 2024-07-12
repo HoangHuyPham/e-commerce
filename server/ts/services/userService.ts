@@ -12,6 +12,22 @@ namespace userService{
             userName, password
         }})
     }
+
+    export const getAccountInfo = (userName:string):Promise<Account|null> =>{
+        return Account.findOne({where:{
+            userName
+        }})
+    }
+
+    export const updateAccountById = (id:number, newAttr:CreationAttributes<Account>):Promise<any> =>{
+        return Account.update(newAttr, {where: {id}})
+    }
+
+    export const changePassword = (userName:string, oldPassword:string ,newPassword:string):Promise<any> =>{
+        return Account.update({password:newPassword}, {where: {userName, password:oldPassword}})
+    }
+
+
 }
 
 

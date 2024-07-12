@@ -40,15 +40,18 @@ const auth = (req, resp, next) => {
             // Check token expire
             if (payload.iat <= new Date().getTime()) {
                 resp.json({ status: ResponseStatus_1.ResponseStatus.EXPIRED_TOKEN, data: {} });
+                return;
             }
-            next();
         }
         catch (error) {
             resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
+            return;
         }
+        next();
     }
     else {
         resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
+        return;
     }
 };
 exports.auth = auth;

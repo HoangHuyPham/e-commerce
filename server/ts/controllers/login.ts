@@ -13,7 +13,7 @@ export const loginController = (req:Request, resp:Response):void=>{
 
     userService.login(userName, password).then((e) => {
         if (e){
-            let expireDate = new Date(new Date().getTime() + 60000)
+            let expireDate = new Date(new Date().getTime() + 60000 * 30) //30 min
             // Success
             let payload = {
                 userName,
@@ -28,6 +28,7 @@ export const loginController = (req:Request, resp:Response):void=>{
         }else{
             // Failed
             resp.json({ status: ResponseStatus.FAILED, data: {}} as ResponseData)
+            
         }
         
     }).catch(err => {
