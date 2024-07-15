@@ -5,6 +5,17 @@ $MAIN_COLOR_FADE: rgb(69, 68, 68, 0.5);
 body {
     background-color: #f5f5f5;
 
+    .DashBoardPage{
+        display: flex;
+
+        .Left{
+            color: white;
+            padding: 20px 50px;
+            min-height: 800px;
+            background-color: $MAIN_COLOR_FADE;
+        }
+    }
+
     .InfoPage {
         box-sizing: border-box;
         margin: 50px auto;

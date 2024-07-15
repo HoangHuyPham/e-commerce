@@ -11,12 +11,12 @@ import {
   Navigate,
 } from "react-router-dom";
 import Home from "./views/Home";
-import Panel from "./views/Panel";
 import NotFound from "./views/NotFound";
 import SignInOut from "./views/SignInUp";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
 import Info from "./views/Info";
+import DashBoard from "./views/DashBoard";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -25,7 +25,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<Home />} />
-        <Route path="panel" element={<Panel />} />
+        <Route path="dashboard" element={<DashBoard />} />
       </Route>
 
       <Route path="sign" element={<SignInOut />}>

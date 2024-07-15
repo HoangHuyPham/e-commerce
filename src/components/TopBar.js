@@ -77,7 +77,7 @@ function TopBar() {
 
             <Dropdown.Menu>
               <Dropdown.Item onClick={()=>navigate("/home")}>Trang chủ</Dropdown.Item>
-              {user.isAdmin && <Dropdown.Item>Dashboard</Dropdown.Item>}
+              {user.isAdmin && <Dropdown.Item onClick={()=>navigate("/dashboard")}>Dashboard</Dropdown.Item>}
               <Dropdown.Item onClick={()=>navigate("/info/me")}>Thông tin</Dropdown.Item>
               <Dropdown.Item onClick={()=>navigate("/info/me")}>Đổi mật khẩu</Dropdown.Item>
               <Dropdown.Divider />
