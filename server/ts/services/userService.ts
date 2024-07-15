@@ -1,5 +1,5 @@
 import { Account } from "../models/Account"
-import {CreationAttributes} from '@sequelize/core';
+import {CreationAttributes, UpdateValues} from '@sequelize/core';
 
 namespace userService{
 
@@ -12,6 +12,23 @@ namespace userService{
             userName, password
         }})
     }
+
+    export const getAccountInfo = (userName:string):Promise<Account|null> =>{
+        return Account.findOne({where:{
+            userName
+        }})
+    }
+
+    export const updateAccountById = (id:number, newAttr:UpdateValues<Account>):Promise<any> =>{
+        return Account.update(newAttr, {where: {id}})
+    }
+    
+    
+    export const changePassword = (userName:string, oldPassword:string ,newPassword:string):Promise<any> =>{
+        return Account.update({password:newPassword}, {where: {userName, password:oldPassword}})
+    }
+
+
 }
 
 

@@ -22,42 +22,41 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.auth = void 0;
-const dotenv = __importStar(require("dotenv"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.authMeController = void 0;
 const ResponseStatus_1 = require("../const/ResponseStatus");
 const userService_1 = __importDefault(require("../services/userService"));
+const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const auth = (req, resp, next) => {
+const authMeController = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     let token = (_a = req.headers) === null || _a === void 0 ? void 0 : _a.authorization;
-    if (token) {
-        try {
-            // Verify token
-            let payload = jsonwebtoken_1.default.verify(token.split(" ")[1], process.env.JWT_SECRET_KEY);
-            // Check token expire
-            if (payload.iat <= new Date().getTime()) {
-                resp.json({ status: ResponseStatus_1.ResponseStatus.EXPIRED_TOKEN, data: {} });
-                return;
-            }
+    let payload = token === null || token === void 0 ? void 0 : token.split(".")[1];
+    let { userName } = JSON.parse(atob(payload));
+    userService_1.default.getAccountInfo(userName).then((e) => {
+        if (e) {
+            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
         }
-        catch (error) {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
-            return;
+        else {
+            // Failed
+            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
         }
-        let u = JSON.parse(atob(token.split(".")[1]));
-        userService_1.default.getAccountInfo(u.userName).then(e => {
-            req.user = e;
-            next();
-        });
-    }
-    else {
+    }).catch(err => {
+        // Error
+        console.log(err);
         resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
-        return;
-    }
-};
-exports.auth = auth;
+    });
+});
+exports.authMeController = authMeController;

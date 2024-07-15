@@ -1,12 +1,10 @@
-import React, { Component } from "react";
-import logo from "../assets/images/logo.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
   faGithub,
-  faInstagram,
+  faInstagram
 } from "@fortawesome/free-brands-svg-icons";
-import { Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { Component } from "react";
 
 class Footer extends Component {
   render() {

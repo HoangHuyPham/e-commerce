@@ -1,8 +1,7 @@
 import React, { Component } from "react";
+import Carousel from 'react-bootstrap/Carousel';
 import slide1 from "../assets/images/slideshow1.png";
 import slide2 from "../assets/images/slideshow2.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Carousel from 'react-bootstrap/Carousel';
 
 class SlideShow extends Component {
   render() {

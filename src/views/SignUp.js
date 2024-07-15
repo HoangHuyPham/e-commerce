@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import Loading from "../components/Loading";
@@ -17,7 +17,6 @@ function SignUp(props) {
   });
   const [loading, setLoading] = useState(false);
   const [dataToast, setDataToast] = useState([]);
-  const [validationMessage, setVM] = useState("");
 
   const handleSignUpBtn = () => {
     const raw = JSON.stringify(signUpPayload);
@@ -57,6 +56,17 @@ function SignUp(props) {
         }
       })
       .catch((err) => {
+        setTimeout(() => {
+          setLoading(false);
+          setDataToast([
+            {
+              id: new Date().getTime(),
+              show: true,
+              info: "Lỗi",
+              content: "Đăng kí thất bại",
+            },
+          ]);
+        }, 100);
         console.log(err);
       });
   };
@@ -150,21 +160,6 @@ function SignUp(props) {
           </Form.Control.Feedback>
         </Form.Group>
 
-        {
-          //  let userName: string = req.body?.userName
-          //  let password: string = req.body?.password
-          //  let firstName: string = req.body?.firstName
-          //  let lastName: string = req.body?.lastName
-          //  let email: string = req.body?.email
-          //  let address: string  = req.body?.address
-          //  let phoneNumber: number = req.body?.phoneNumber
-          //  let avatarLink: string = req.body?.avatarLink
-          //  let isAdmin: boolean = req.body?.isAdmin
-        }
-
-        <Form.Text id="passwordHelpBlock" style={{ color: "red" }}>
-          {validationMessage}
-        </Form.Text>
 
         <div className="buttons">
           <Button variant="danger" onClick={handleSignUpBtn}>

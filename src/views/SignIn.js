@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import Loading from "../components/Loading";
@@ -51,7 +51,17 @@ function SignIn(props) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        setTimeout(() => {
+          setLoading(false);
+          setDataToast([
+            {
+              id: new Date().getTime(),
+              show: true,
+              info: "Lỗi",
+              content: "Đăng nhập thất bại",
+            },
+          ]);
+        }, 100);
       });
   };
 

@@ -26,38 +26,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.auth = void 0;
-const dotenv = __importStar(require("dotenv"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.changePassword = void 0;
 const ResponseStatus_1 = require("../const/ResponseStatus");
 const userService_1 = __importDefault(require("../services/userService"));
+const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const auth = (req, resp, next) => {
-    var _a;
-    let token = (_a = req.headers) === null || _a === void 0 ? void 0 : _a.authorization;
-    if (token) {
-        try {
-            // Verify token
-            let payload = jsonwebtoken_1.default.verify(token.split(" ")[1], process.env.JWT_SECRET_KEY);
-            // Check token expire
-            if (payload.iat <= new Date().getTime()) {
-                resp.json({ status: ResponseStatus_1.ResponseStatus.EXPIRED_TOKEN, data: {} });
-                return;
-            }
-        }
-        catch (error) {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
-            return;
-        }
-        let u = JSON.parse(atob(token.split(".")[1]));
-        userService_1.default.getAccountInfo(u.userName).then(e => {
-            req.user = e;
-            next();
-        });
-    }
-    else {
-        resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
+const changePassword = (req, resp) => {
+    let newAttr = Object.assign({}, req.body);
+    let id = req.body.id;
+    if (!id) {
+        resp.json({ status: ResponseStatus_1.ResponseStatus.INVALID, data: newAttr });
         return;
     }
+    userService_1.default.updateAccountById(id, newAttr).then((e) => {
+        if (e) {
+            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
+            return;
+        }
+        else {
+            // Failed
+            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+            return;
+        }
+    }).catch(err => {
+        // Error
+        console.log("authMeGet>>", err);
+        resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+    });
 };
-exports.auth = auth;
+exports.changePassword = changePassword;

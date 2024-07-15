@@ -38,7 +38,7 @@ const loginController = (req, resp) => {
     let password = (_b = req.body) === null || _b === void 0 ? void 0 : _b.password;
     userService_1.default.login(userName, password).then((e) => {
         if (e) {
-            let expireDate = new Date(new Date().getTime() + 60000);
+            let expireDate = new Date(new Date().getTime() + 60000 * 30); //30 min
             // Success
             let payload = {
                 userName,

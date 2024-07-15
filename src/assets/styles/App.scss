@@ -1,10 +1,67 @@
-$FONT_SIZE : 25px;
-$MAIN_COLOR : rgb(69, 68, 68);
-$MAIN_COLOR_FADE : rgb(69, 68, 68, 0.5);
+$FONT_SIZE: 25px;
+$MAIN_COLOR: rgb(69, 68, 68);
+$MAIN_COLOR_FADE: rgb(69, 68, 68, 0.5);
 
-body{
+body {
+    background-color: #f5f5f5;
 
-    .ToastContainer{
+    .InfoPage {
+        box-sizing: border-box;
+        margin: 50px auto;
+        width: 80%;
+        padding: 50px;
+        background-color: white;
+        display: flex;
+        color: black;
+        justify-content: center;
+
+        .avatar {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            cursor: pointer;
+
+            .avatar_container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .avatar_sender {
+                display: none;
+            }
+            img {
+                border-radius: 50% 50%;
+            }
+
+            &:hover::after {
+                content: "Thay đổi";
+                display: flex;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                color: white;
+                width: 150px;
+                height: 150px;
+                border-radius: 50% 50%;
+                font-size: 15px;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        .form {
+            margin-left: 50px;
+
+            .options {
+                display: flex;
+                justify-content: center;
+                column-gap: 5px;
+            }
+        }
+    }
+
+    .ToastContainer {
         right: 0;
         top: 20px;
         height: 520px;
@@ -12,7 +69,7 @@ body{
         position: fixed;
     }
 
-    .Loading{
+    .Loading {
         left: 0;
         top: 0;
         position: fixed;
@@ -23,18 +80,18 @@ body{
         justify-content: center;
         align-items: center;
 
-        .spinner-border{
+        .spinner-border {
             width: 200px;
             height: 200px;
         }
     }
-   
-    .SignInUp{
 
-        .form-label{
-            color: white;;
+    .SignInUp {
+        .form-label {
+            color: white;
         }
-        .SignIn, .SignUp{
+        .SignIn,
+        .SignUp {
             border-radius: 10px;
             margin: 100px auto;
             box-sizing: border-box;
@@ -42,8 +99,7 @@ body{
             background-color: $MAIN_COLOR;
             width: 400px;
 
-            
-            .buttons{
+            .buttons {
                 display: flex;
                 flex-direction: column;
                 margin-top: 20px;
@@ -51,19 +107,20 @@ body{
                 align-items: center;
                 row-gap: 10px;
 
-                button{
+                button {
                     width: 150px;
                 }
             }
 
-            h1, span{
+            h1,
+            span {
                 text-align: center;
                 color: white;
             }
         }
     }
 
-    .TopBar{
+    .TopBar {
         display: flex;
         padding: 0 15px 0;
         box-sizing: border-box;
@@ -72,49 +129,48 @@ body{
         color: white;
         background-color: $MAIN_COLOR;
         align-items: center;
-        
 
-        img{
+        img {
             width: 12%;
             height: 100%;
         }
 
-        .Misc{
+        .Misc {
             box-sizing: border-box;
             padding: 0 10px 0;
             display: inherit;
             column-gap: 5px;
-            .Cart, .Fav{
+            .Cart,
+            .Fav {
                 font-size: $FONT_SIZE;
                 cursor: pointer;
-                transition: opacity ease-in-out .3s;
-                &:hover{
+                transition: opacity ease-in-out 0.3s;
+                &:hover {
                     opacity: 0.8;
                 }
             }
-            .Cart{
+            .Cart {
                 color: rgb(0, 162, 255);
             }
-            .Fav{
+            .Fav {
                 color: rgb(187, 6, 6);
             }
         }
 
-        .Login, .User{
+        .Login,
+        .User {
             margin-left: auto;
             display: flex;
             column-gap: 5px;
         }
 
-        
-
-        .SearchBar{
+        .SearchBar {
             margin-left: 50px;
             padding: 20px 0 20px;
             line-height: normal;
             display: flex;
             align-items: center;
-            .SearchInput{
+            .SearchInput {
                 border: 1px solid black;
                 box-sizing: border-box;
                 height: 100%;
@@ -122,7 +178,7 @@ body{
                 font-size: $FONT_SIZE;
                 outline: none;
             }
-            .SearchBtn{
+            .SearchBtn {
                 width: 50px;
                 box-sizing: border-box;
                 height: 100%;
@@ -138,29 +194,28 @@ body{
         }
     }
 
-
-    .SlideShow{
+    .SlideShow {
         margin: 0 auto;
         width: 90%;
 
-        .carousel-control-prev-icon, .carousel-control-next-icon{
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
             scale: 2;
         }
 
-        .w-100{
+        .w-100 {
             max-height: 400px;
         }
 
-        .carousel-indicators{
-            button{
+        .carousel-indicators {
+            button {
                 margin: 0 10px 0;
                 scale: 1.5;
             }
         }
     }
 
-
-    .WatchList{
+    .WatchList {
         display: flex;
         flex-direction: column;
         box-sizing: border-box;
@@ -168,7 +223,7 @@ body{
         max-width: 1200px;
         margin: 0 auto 0;
 
-        .Title{
+        .Title {
             display: flex;
             align-self: center;
             font-size: 30px;
@@ -179,7 +234,8 @@ body{
             align-items: center;
             column-gap: 5px;
 
-            &::before, &::after{
+            &::before,
+            &::after {
                 flex-grow: 2;
                 content: "";
                 height: 1px;
@@ -188,52 +244,51 @@ body{
                 background-color: black;
             }
         }
-        
-        .Content{
+
+        .Content {
             display: flex;
-        box-sizing: border-box;
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto 0;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 0;
             flex-wrap: wrap;
-            .card{
+            .card {
                 box-sizing: border-box;
                 padding: 20px;
                 width: 300px;
                 border: none;
                 cursor: pointer;
-                transition: opacity ease .5s;
-    
-                .card-body{
-                    .card-title{
+                transition: opacity ease 0.5s;
+
+                .card-body {
+                    .card-title {
                         text-align: center;
                         font-size: 25px;
                     }
-                    .card-text{
+                    .card-text {
                         text-align: center;
                         font-size: 20px;
                         color: red;
                     }
                 }
 
-                .card-footer{
+                .card-footer {
                     display: flex;
                     background-color: white;
                     column-gap: 5px;
-                    .BuyBtn{
+                    .BuyBtn {
                         flex-grow: 2;
                     }
                 }
-    
-                img:hover{
+
+                img:hover {
                     opacity: 0.8;
                 }
             }
         }
-
     }
 
-    .Footer{
+    .Footer {
         background-color: $MAIN_COLOR;
         color: white;
         width: 100%;
@@ -241,55 +296,56 @@ body{
         display: flex;
         flex-direction: column;
         row-gap: 100px;
-        
-        .FirstLine{
+
+        .FirstLine {
             display: flex;
             column-gap: 100px;
-            .Info{
+            .Info {
                 width: 30%;
                 font-size: 20px;
             }
-            .Support, .Util{
+            .Support,
+            .Util {
                 font-size: 25px;
                 text-transform: uppercase;
             }
 
-            .Support{
-                ul{
+            .Support {
+                ul {
                     font-size: 20px;
                     text-transform: none;
 
-                    li{
-                       span{
-                        display: inline-block;
-                        
-                        &:hover{
-                            &::after{
-                                content: "";
-                                display: block;
-                                background-color: white;
-                                height: 2px;
-                                animation: widen ease forwards .3s;
+                    li {
+                        span {
+                            display: inline-block;
+
+                            &:hover {
+                                &::after {
+                                    content: "";
+                                    display: block;
+                                    background-color: white;
+                                    height: 2px;
+                                    animation: widen ease forwards 0.3s;
+                                }
                             }
                         }
-                       }
                     }
                 }
             }
         }
 
-        .SecondLine{
-            display: flex; 
+        .SecondLine {
+            display: flex;
 
-            .FollowUs{
+            .FollowUs {
                 font-size: 25px;
                 text-transform: uppercase;
 
-                .Social{
+                .Social {
                     display: flex;
                     column-gap: 5px;
 
-                    a{
+                    a {
                         text-decoration: none;
                         color: white;
                     }
@@ -299,11 +355,11 @@ body{
     }
 }
 
-
 @keyframes widen {
-    from{
+    from {
         width: 0;
-    }to{
+    }
+    to {
         width: 100%;
     }
 }
