@@ -10,30 +10,37 @@ import logo from "../assets/images/logo.png";
 
 function TopBar() {
   const navigate = useNavigate();
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"));
-  const [user, setUser] = useState(null);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
+  const [user, setUser] = useState(null)
+  const [favCount, setFavCount] = useState(0);
+
+
+  useEffect(()=>{
+    let payload = accessToken?.split(".")[1]
+    if (!payload)
+      return
+    let decodedPayload = JSON.parse(atob(payload))
+
+    setUser({
+      ...decodedPayload
+    })
+  }, [accessToken])
 
   useEffect(() => {
+    const updateFavCount = () => {
+      const favoriteData = JSON.parse(localStorage.getItem("favoriteData")) || [];
+      setFavCount(favoriteData.length);
+    };
 
-    try {
-      let payload = accessToken?.split(".")[1];
-      if (!payload) 
-        return;
-      
-      let decodedPayload = JSON.parse(atob(payload));
-      if (decodedPayload.iat  <= new Date().getTime()){
-        setUser(null)
-      }else{
-        setUser({
-          ...decodedPayload,
-        });
-      }
-      
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }, [accessToken]);
+    // Update favCount on component mount and when favoritesUpdated event is dispatched
+    updateFavCount();
+    window.addEventListener("favoritesUpdated", updateFavCount);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("favoritesUpdated", updateFavCount);
+    };
+  }, []);
 
   const handleSigninBtn = () => {
     navigate("/sign/in");
@@ -44,30 +51,42 @@ function TopBar() {
   };
 
   const handleSignOut = () => {
-    setUser(null);
-    localStorage.removeItem("accessToken");
-  };
+    setUser(null)
+    localStorage.removeItem("accessToken")
+    navigate()
+  }
+
+  const handleFavListBtn = () => {
+    if (user==null) {
+      navigate("/sign/in");
+    } else {
+      navigate("/favorites"); }
+  }
+
+  const handleHome = () => {
+    navigate("/home");
+  }
 
   return (
-    <div className="TopBar">
-      <img src={logo} alt="logo" />
-      <section className="SearchBar">
-        <input
-          className="SearchInput"
-          placeholder="Nhập sản phẩm bạn muốn tìm"
-        />
-        <button className="SearchBtn">
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
-      </section>
+      <div className="TopBar">
+        <img src={logo} alt="logo" style={{height: '100%', width: 'auto'}} onClick={handleHome} />
+        <section className="SearchBar">
+          <input
+              className="SearchInput"
+              placeholder="Nhập sản phẩm bạn muốn tìm"
+          />
+          <button className="SearchBtn">
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+        </section>
 
-      <section className="Misc">
-        <FontAwesomeIcon className="Cart" icon={faCartShopping} />
-        <span className="CartNum">0</span>
-        <FontAwesomeIcon className="Fav" icon={faHeart} />
-        <span className="FavNum">0</span>
-      </section>
-      {(user && (
+        <section className="Misc">
+          <FontAwesomeIcon className="Cart" icon={faCartShopping} />
+          <span className="CartNum">0</span>
+          <FontAwesomeIcon className="Fav" icon={faHeart} onClick={handleFavListBtn}/>
+          <span className="FavNum">{favCount}</span>
+        </section>
+        {(user && (
         <section className="User">
           <Dropdown>
             <Dropdown.Toggle variant="primary" id="dropdown-basic">
@@ -103,7 +122,9 @@ function TopBar() {
           </Button>
         </section>
       )}
-    </div>
+
+
+      </div>
   );
 }
 
