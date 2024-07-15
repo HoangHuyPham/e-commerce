@@ -1,0 +1,12 @@
+body .NotFound {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+body .NotFound .button {
+  display: inline-block;
+}
+
+/*# sourceMappingURL=NotFound.css.map */
