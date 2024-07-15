@@ -86,30 +86,42 @@ function TopBar() {
           <FontAwesomeIcon className="Fav" icon={faHeart} onClick={handleFavListBtn}/>
           <span className="FavNum">{favCount}</span>
         </section>
-        {
-            (user && (<section className="User">
-              <Dropdown>
-                <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                  {(user.firstName + " " + user.lastName).toUpperCase()}
-                </Dropdown.Toggle>
+        {(user && (
+        <section className="User">
+          <Dropdown>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
 
-                <Dropdown.Menu>
-                  <Dropdown.Item>Thông tin</Dropdown.Item>
-                  <Dropdown.Item>Đổi mật khẩu</Dropdown.Item>
-                  <Dropdown.Divider />
-                  <Dropdown.Item onClick={handleSignOut}>Đăng xuất</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </section>)) || (<section className="Login">
-              <Button className="SigninBtn" variant="primary" onClick={handleSigninBtn}>
-                Đăng nhập
-              </Button>
-              <Button className="SignUpBtn" variant="danger" onClick={handleSignUpBtn}>
-                Đăng kí
-              </Button>
-            </section>)
-        }
+              {(!!user.firstName && !!user.lastName) && (user.firstName + " " + user.lastName).toUpperCase()}
+            </Dropdown.Toggle>
 
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={()=>navigate("/home")}>Trang chủ</Dropdown.Item>
+              {user.isAdmin && <Dropdown.Item>Dashboard</Dropdown.Item>}
+              <Dropdown.Item onClick={()=>navigate("/info/me")}>Thông tin</Dropdown.Item>
+              <Dropdown.Item onClick={()=>navigate("/info/me")}>Đổi mật khẩu</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleSignOut}>Đăng xuất</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </section>
+      )) || (
+        <section className="Login">
+          <Button
+            className="SigninBtn"
+            variant="primary"
+            onClick={handleSigninBtn}
+          >
+            Đăng nhập
+          </Button>
+          <Button
+            className="SignUpBtn"
+            variant="danger"
+            onClick={handleSignUpBtn}
+          >
+            Đăng kí
+          </Button>
+        </section>
+      )}
 
 
       </div>
