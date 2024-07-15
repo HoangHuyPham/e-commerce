@@ -17,6 +17,9 @@ import SignInOut from "./views/SignInUp";
 import SignIn from "./views/SignIn";
 import SignUp from "./views/SignUp";
 import Info from "./views/Info";
+import WatchList from "./components/WatchList";
+import WatchDetail from "./views/WatchDetail";
+import FavoriteWatches from "./views/FavoriteWatches";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -39,7 +42,13 @@ const router = createBrowserRouter(
         <Route path="me" element={<Info />} />
         <Route path="up" element={<SignUp />} />
       </Route>
-      
+
+    <Route>
+        <Route path="/" element={<WatchList />} />
+        <Route path="/watch/:id" element={<WatchDetail />} />
+        <Route path="/favorites" element={<FavoriteWatches />} />
+    </Route>
+
       <Route path="*" element={<NotFound />} />
     </>
   )
