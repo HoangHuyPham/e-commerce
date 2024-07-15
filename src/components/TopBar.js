@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from "react";
-import logo from "../assets/images/logo.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faMagnifyingGlass,
   faCartShopping,
-  faHeart,
+  faHeart, faMagnifyingGlass
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 function TopBar() {
   const navigate = useNavigate();

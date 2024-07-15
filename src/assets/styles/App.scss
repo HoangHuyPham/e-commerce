@@ -20,7 +20,15 @@ body {
             width: 150px;
             height: 150px;
             cursor: pointer;
-            
+
+            .avatar_container {
+                width: 150px;
+                height: 150px;
+            }
+
+            .avatar_sender {
+                display: none;
+            }
             img {
                 border-radius: 50% 50%;
             }
@@ -45,7 +53,7 @@ body {
         .form {
             margin-left: 50px;
 
-            .options{
+            .options {
                 display: flex;
                 justify-content: center;
                 column-gap: 5px;

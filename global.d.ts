@@ -10,5 +10,11 @@ declare namespace NodeJS {
     APP_PORT?: string | undefined
 
     JWT_SECRET_KEY?: string | undefined
+
+    API_SECRET_KEY?: string | undefined;
+    API_KEY?: string | undefined;
+    CLOUD_NAME?: string | undefined;
+
+    SAVE_PATH?: string | undefined
   }
 }

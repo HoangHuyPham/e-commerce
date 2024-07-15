@@ -4,5 +4,6 @@ export enum ResponseStatus{
     INVALID = "Invalid",
     UNAUTHORIZED = "Unauthorized",
     AUTHORIZED = "Authorized",
-    EXPIRED_TOKEN = "Expired Token"
+    EXPIRED_TOKEN = "Expired Token",
+    MAX_LIMIT = "File size is exceeed"
 }

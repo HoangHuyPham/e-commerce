@@ -3,6 +3,7 @@ import { ResponseStatus } from "../const/ResponseStatus"
 import { ResponseData } from "../models/ResponseData"
 import userService from "../services/userService"
 import * as dotenv from "dotenv"
+import imageService from "../services/imageService"
 dotenv.config()
 
 
@@ -17,15 +18,25 @@ export const authMeGet = (req: Request, resp: Response): void => {
     }
 
     userService.getAccountInfo(userName).then((e) => {
+        return new Promise((resolve)=>{
+            let info:any = e?.dataValues
+            imageService.getImageById(e?.avatarId as number).then(
+                e=>{
+                    info.url = e?.url
+                    resolve(info)
+                }
+            )
+        })
+    }).then(e=>{
         if (e) {
-            resp.json({ status: ResponseStatus.SUCCESS, data: e } as ResponseData)
-            return
-        } else {
-            // Failed
-            resp.json({ status: ResponseStatus.FAILED, data: {} } as ResponseData)
+            resp.json({ status: ResponseStatus.SUCCESS, data: {...e,}} as ResponseData)
             return
         }
-
+        // else {
+        //     // Failed
+        //     resp.json({ status: ResponseStatus.FAILED, data: {} } as ResponseData)
+        //     return
+        // }
     }).catch(err => {
         // Error
         console.log("authMeGet>>", err)

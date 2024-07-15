@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
-import { ResponseStatus } from "../ResponseStatus";
 
 function FormChangePassword({
   isChangingPassword,

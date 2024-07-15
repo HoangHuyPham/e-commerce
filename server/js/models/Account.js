@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Account = void 0;
 const core_1 = require("@sequelize/core");
 const decorators_legacy_1 = require("@sequelize/core/decorators-legacy");
+const Image_1 = require("./Image");
 class Account extends core_1.Model {
 }
 exports.Account = Account;
@@ -42,9 +43,12 @@ __decorate([
     (0, decorators_legacy_1.Attribute)(core_1.DataTypes.INTEGER)
 ], Account.prototype, "phoneNumber", void 0);
 __decorate([
-    (0, decorators_legacy_1.Attribute)(core_1.DataTypes.STRING)
-], Account.prototype, "avatarLink", void 0);
-__decorate([
     (0, decorators_legacy_1.Default)(false),
     (0, decorators_legacy_1.Attribute)(core_1.DataTypes.BOOLEAN)
 ], Account.prototype, "isAdmin", void 0);
+__decorate([
+    (0, decorators_legacy_1.BelongsTo)(() => Image_1.Image, 'avatarId')
+], Account.prototype, "avatar", void 0);
+__decorate([
+    (0, decorators_legacy_1.Attribute)(core_1.DataTypes.INTEGER)
+], Account.prototype, "avatarId", void 0);

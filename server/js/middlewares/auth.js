@@ -27,15 +27,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.auth = void 0;
-const ResponseStatus_1 = require("../const/ResponseStatus");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv = __importStar(require("dotenv"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const ResponseStatus_1 = require("../const/ResponseStatus");
+const userService_1 = __importDefault(require("../services/userService"));
 dotenv.config();
 const auth = (req, resp, next) => {
     var _a;
     let token = (_a = req.headers) === null || _a === void 0 ? void 0 : _a.authorization;
     if (token) {
         try {
+            // Verify token
             let payload = jsonwebtoken_1.default.verify(token.split(" ")[1], process.env.JWT_SECRET_KEY);
             // Check token expire
             if (payload.iat <= new Date().getTime()) {
@@ -47,7 +49,11 @@ const auth = (req, resp, next) => {
             resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });
             return;
         }
-        next();
+        let u = JSON.parse(atob(token.split(".")[1]));
+        userService_1.default.getAccountInfo(u.userName).then(e => {
+            req.user = e;
+            next();
+        });
     }
     else {
         resp.json({ status: ResponseStatus_1.ResponseStatus.UNAUTHORIZED, data: {} });

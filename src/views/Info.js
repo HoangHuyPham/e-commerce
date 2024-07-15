@@ -1,12 +1,12 @@
-import { Button, Form, InputGroup } from "react-bootstrap";
-import "../assets/styles/App.scss";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ResponseStatus } from "../ResponseStatus";
+import { useNavigate } from "react-router-dom";
+import "../assets/styles/App.scss";
+import AvatarEditor from "../components/AvatarEditor";
+import FormChangePassword from "../components/FormChangePassword";
+import FormPersonal from "../components/FormPersonal";
 import MyToast from "../components/MyToast";
 import TopBar from "../components/TopBar";
-import FormPersonal from "../components/FormPersonal";
-import FormChangePassword from "../components/FormChangePassword";
+import { ResponseStatus } from "../ResponseStatus";
 
 function Info() {
   const navigate = useNavigate();
@@ -15,35 +15,38 @@ function Info() {
   const [loading, setLoading] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false)
 
-  useEffect(() => {
-    try {
-      fetch("http://localhost:3001/api/v1/auth/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
-        .then((e) => e.json())
-        .then((data) => {
-          if (
-            data.status === ResponseStatus.EXPIRED_TOKEN ||
-            data.status === ResponseStatus.UNAUTHORIZED
-          ) {
-            navigate("/sign/in");
-            return;
-          }
+  useEffect(() => {updateInfo()} , []);
 
-          setUserInfo(data.data || {});
+  const updateInfo = async() =>{
+    
+      try {
+        fetch("http://localhost:3001/api/v1/auth/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
         })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.error(error);
-      navigate("/sign/in");
-    }
-  }, []);
-
+          .then((e) => e.json())
+          .then((data) => {
+            if (
+              data.status === ResponseStatus.EXPIRED_TOKEN ||
+              data.status === ResponseStatus.UNAUTHORIZED
+            ) {
+              navigate("/sign/in");
+              return;
+            }
+  
+            setUserInfo(data.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.error(error);
+        navigate("/sign/in");
+      }
+    
+  }
 
   const changePasswordHandle = async (userName, oldPassword, newPassword) => {
     try {
@@ -147,33 +150,13 @@ function Info() {
     
   }
 
-  const avatarHandle = () => {
-    var input = document.createElement("input");
-    input.type = "file";
-    input.click();
-
-    input.onchange = (e) => {
-      var file = e.target.files[0];
-      console.log(file);
-    };
-  };
 
   return (
     <>
       <MyToast data={dataToast}/>
       <TopBar />
       <div className="InfoPage">
-      {console.log("render")}
-      <section className="avatar" onClick={avatarHandle}>
-        <img
-          width="150"
-          height="150"
-          className="avatar"
-          src="https://scontent.fsgn5-14.fna.fbcdn.net/v/t39.30808-1/131373127_1971557266352370_44313375092480653_n.jpg?stp=dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=BrgrQqICxJcQ7kNvgEgE4ZO&_nc_ht=scontent.fsgn5-14.fna&oh=00_AYCGgC5CCpXS9M4XAy8k57XzoEzcLNX6qq7_DM7qkfKcSw&oe=66967A67"
-          alt="avatar"
-          loading="lazy"
-        ></img>
-      </section>
+      <AvatarEditor dataToast={dataToast} setDataToast={setDataToast} userInfo={userInfo} updateInfo={updateInfo} />
       {(isChangingPassword && <FormChangePassword changePasswordHandle={changePasswordHandle} isChangingPassword={isChangingPassword} setIsChangingPassword={setIsChangingPassword} userInfo={userInfo} setUserInfo={setUserInfo} loading={loading} updateHandle={updateHandle}/>)||<FormPersonal setIsChangingPassword={setIsChangingPassword} userInfo={userInfo} setUserInfo={setUserInfo} loading={loading} updateHandle={updateHandle}/>}
       
     </div>    

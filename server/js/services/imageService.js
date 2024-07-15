@@ -31,35 +31,53 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@sequelize/core");
-const mysql_1 = require("@sequelize/mysql");
 const dotenv = __importStar(require("dotenv"));
-const Account_1 = require("./models/Account");
-const Image_1 = require("./models/Image");
-const Watch_1 = require("./models/Watch");
+const cloudinary_1 = require("cloudinary");
+const fileUtils_1 = __importDefault(require("../helper/fileUtils"));
+const Image_1 = require("../models/Image");
 dotenv.config();
-var connectDB;
-(function (connectDB) {
-    const connection = new core_1.Sequelize({
-        dialect: mysql_1.MySqlDialect,
-        database: process.env.DB_NAME,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT ? Number.parseInt(process.env.DB_PORT) : 3306,
-        models: [Account_1.Account, Watch_1.Watch, Image_1.Image]
+var imageService;
+(function (imageService) {
+    cloudinary_1.v2.config({
+        api_key: process.env.API_KEY,
+        cloud_name: process.env.CLOUD_NAME,
+        api_secret: process.env.API_SECRET_KEY,
     });
-    connectDB.connect = () => __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield connection.authenticate();
-            console.log("Connect to DB successfully.");
-            yield connection.sync();
-            console.log('All models were synchronized successfully.');
+    imageService.getImageById = (id) => __awaiter(this, void 0, void 0, function* () {
+        return Image_1.Image.findOne({ where: { id } });
+    });
+    imageService.upload = (name, data) => __awaiter(this, void 0, void 0, function* () {
+        const file = fileUtils_1.default.saveFile(name, data);
+        var res = { id: undefined, publicId: undefined, url: undefined };
+        if (!!file) {
+            yield cloudinary_1.v2.uploader.upload(file, {
+                folder: "images"
+            })
+                .then(e => Image_1.Image.create({ publicId: e.public_id, url: e.url }))
+                .then(e => {
+                res = Object.assign({}, e.dataValues);
+                console.log(`${__filename} >> database save`);
+            })
+                .catch(err => {
+                console.log(err);
+                return new Promise(() => { return {}; });
+            }).finally(() => {
+                console.log(`delete >> ${fileUtils_1.default.removeFile(name)}`);
+            });
+            return new Promise((resolve, reject) => {
+                if (!res.id) {
+                    reject(undefined);
+                }
+                resolve(res);
+            });
         }
-        catch (error) {
-            console.log(error);
+        else {
+            return new Promise(() => undefined);
         }
     });
-})(connectDB || (connectDB = {}));
-exports.default = connectDB;
+})(imageService || (imageService = {}));
+exports.default = imageService;

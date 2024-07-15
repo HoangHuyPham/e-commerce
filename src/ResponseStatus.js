@@ -9,4 +9,5 @@ var ResponseStatus;
     ResponseStatus["UNAUTHORIZED"] = "Unauthorized";
     ResponseStatus["AUTHORIZED"] = "Authorized";
     ResponseStatus["EXPIRED_TOKEN"] = "Expired Token";
+    ResponseStatus["MAX_LIMIT"] = "File size is exceeed";
 })(ResponseStatus || (exports.ResponseStatus = ResponseStatus = {}));

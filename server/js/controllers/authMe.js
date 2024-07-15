@@ -30,6 +30,7 @@ exports.authMePost = exports.authMeGet = void 0;
 const ResponseStatus_1 = require("../const/ResponseStatus");
 const userService_1 = __importDefault(require("../services/userService"));
 const dotenv = __importStar(require("dotenv"));
+const imageService_1 = __importDefault(require("../services/imageService"));
 dotenv.config();
 const authMeGet = (req, resp) => {
     var _a;
@@ -41,15 +42,23 @@ const authMeGet = (req, resp) => {
         return;
     }
     userService_1.default.getAccountInfo(userName).then((e) => {
+        return new Promise((resolve) => {
+            let info = e === null || e === void 0 ? void 0 : e.dataValues;
+            imageService_1.default.getImageById(e === null || e === void 0 ? void 0 : e.avatarId).then(e => {
+                info.url = e === null || e === void 0 ? void 0 : e.url;
+                resolve(info);
+            });
+        });
+    }).then(e => {
         if (e) {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
+            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: Object.assign({}, e) });
             return;
         }
-        else {
-            // Failed
-            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
-            return;
-        }
+        // else {
+        //     // Failed
+        //     resp.json({ status: ResponseStatus.FAILED, data: {} } as ResponseData)
+        //     return
+        // }
     }).catch(err => {
         // Error
         console.log("authMeGet>>", err);

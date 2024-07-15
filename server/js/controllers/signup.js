@@ -15,9 +15,9 @@ const signUpController = (req, resp) => {
     let email = (_e = req.body) === null || _e === void 0 ? void 0 : _e.email;
     let address = (_f = req.body) === null || _f === void 0 ? void 0 : _f.address;
     let phoneNumber = (_g = req.body) === null || _g === void 0 ? void 0 : _g.phoneNumber;
-    let avatarLink = (_h = req.body) === null || _h === void 0 ? void 0 : _h.avatarLink;
+    let avatarId = (_h = req.body) === null || _h === void 0 ? void 0 : _h.avatarId;
     let isAdmin = (_j = req.body) === null || _j === void 0 ? void 0 : _j.isAdmin;
-    userService_1.default.signUp({ userName, password, firstName, lastName, email, address, phoneNumber, avatarLink, isAdmin }).then(() => {
+    userService_1.default.signUp({ userName, password, firstName, lastName, email, address, phoneNumber, avatarId, isAdmin }).then(() => {
         resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: "Created" });
     }).catch(err => {
         resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: "Account may be exist" });

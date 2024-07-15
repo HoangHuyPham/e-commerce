@@ -6,31 +6,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Watch = void 0;
+exports.Image = void 0;
 const core_1 = require("@sequelize/core");
 const decorators_legacy_1 = require("@sequelize/core/decorators-legacy");
-const Image_1 = require("./Image");
-class Watch extends core_1.Model {
+class Image extends core_1.Model {
 }
-exports.Watch = Watch;
+exports.Image = Image;
 __decorate([
     (0, decorators_legacy_1.Attribute)(core_1.DataTypes.INTEGER),
     decorators_legacy_1.PrimaryKey,
     decorators_legacy_1.AutoIncrement,
     decorators_legacy_1.NotNull
-], Watch.prototype, "id", void 0);
+], Image.prototype, "id", void 0);
+__decorate([
+    decorators_legacy_1.Unique,
+    (0, decorators_legacy_1.Attribute)(core_1.DataTypes.STRING)
+], Image.prototype, "publicId", void 0);
 __decorate([
     (0, decorators_legacy_1.Attribute)(core_1.DataTypes.STRING)
-], Watch.prototype, "name", void 0);
-__decorate([
-    (0, decorators_legacy_1.Attribute)(core_1.DataTypes.STRING)
-], Watch.prototype, "detail", void 0);
-__decorate([
-    (0, decorators_legacy_1.Attribute)(core_1.DataTypes.DOUBLE)
-], Watch.prototype, "price", void 0);
-__decorate([
-    (0, decorators_legacy_1.BelongsTo)(() => Image_1.Image, 'previewId')
-], Watch.prototype, "preview", void 0);
-__decorate([
-    (0, decorators_legacy_1.Attribute)(core_1.DataTypes.INTEGER)
-], Watch.prototype, "previewId", void 0);
+], Image.prototype, "url", void 0);
