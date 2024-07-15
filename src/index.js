@@ -4,37 +4,54 @@ import "./assets/styles/index.scss";
 import App from "./views/App";
 import reportWebVitals from "./reportWebVitals";
 import {
-    createBrowserRouter,
-    RouterProvider,
-    createRoutesFromElements,
-    Route,
-    Navigate, Routes
+  createBrowserRouter,
+  RouterProvider,
+  createRoutesFromElements,
+  Route,
+  Navigate,
 } from "react-router-dom";
 import Home from "./views/Home";
 import Panel from "./views/Panel";
 import NotFound from "./views/NotFound";
-import WatchList from "./components/WatchList";
-import WatchDetail from "./views/WatchDetail";
+import SignInOut from "./views/SignInUp";
+import SignIn from "./views/SignIn";
+import SignUp from "./views/SignUp";
+import Info from "./views/Info";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route path="/" element={<App />}>
-                <Route index element={<Navigate to="home" />} />
-                <Route path="home" element={<Home />} />
-                <Route path="panel" element={<Panel />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
+  createRoutesFromElements(
+    <>
+      <Route path="/" element={<App />}>
+        <Route index element={<Navigate to="home" />} />
+        <Route path="home" element={<Home />} />
+        <Route path="panel" element={<Panel />} />
+      </Route>
 
-            <Route path="/" element={<WatchList />} />
-            <Route path="/watch/:id" element={<WatchDetail />} /> {/* Định tuyến trang chi tiết */}
+      <Route path="sign" element={<SignInOut />}>
+        <Route index element={<Navigate to="in" />} />
+        <Route path="in" element={<SignIn />} />
+        <Route path="up" element={<SignUp />} />
+      </Route>
 
-        </>
-    )
+      <Route path="info" element={<Info />}>
+        <Route index element={<Navigate to="me" />} />
+        <Route path="me" element={<Info />} />
+        <Route path="up" element={<SignUp />} />
+      </Route>
+      
+      <Route path="*" element={<NotFound />} />
+    </>
+  )
 );
 
-root.render(<RouterProvider router={router}></RouterProvider>);
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router}></RouterProvider>
+  </React.StrictMode>
+
+
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
