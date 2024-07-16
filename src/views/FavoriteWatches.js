@@ -60,10 +60,11 @@ class FavoriteWatches extends Component {
                             {favoriteData.map((v, i) => (
                                 <Card key={i}>
                                     <Link to={`/watch/${v.id}`}>
-                                        <Card.Img variant="top" src={v.link} />
+                                        <Card.Img variant="top" src={v.url} />
                                     </Link>
                                     <Card.Body>
                                         <Card.Title>{v.name}</Card.Title>
+                                        <Card.Text style={{ color: 'black' }}>{v.detail}</Card.Text>
                                         <Card.Text>
                                             {v.price.toLocaleString("vi-VN", {
                                                 style: "currency",
