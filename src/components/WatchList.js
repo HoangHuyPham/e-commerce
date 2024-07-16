@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 const WatchList = () => {
   const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
   const [dataToast, setDataToast] = useState([]);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
+  const [user, setUser] = useState(null)
+  const navigate = useNavigate();
   const [data, setData] = useState([
     {
       id: 1,
@@ -67,26 +70,40 @@ const WatchList = () => {
     }
   ]);
 
-  const navigate = useNavigate();
-
   const handleAddToCart = (params) => {
     // add-to-cart logic here
   }
 
+  useEffect(()=>{
+    let payload = accessToken?.split(".")[1]
+    if (!payload)
+      return
+    let decodedPayload = JSON.parse(atob(payload))
+
+    setUser({
+      ...decodedPayload
+    })
+  }, [accessToken])
+
   const addToFavorites = (watch) => {
-    if (!favoriteData.some((item) => item.id === watch.id)) {
-      const updatedFavorites = [...favoriteData, watch];
-      setFavoriteData(updatedFavorites);
-      localStorage.setItem("favoriteData", JSON.stringify(updatedFavorites));
-      showToast(`${watch.name} đã được thêm vào danh sách yêu thích!`, "Thành công", true);
-      window.dispatchEvent(new Event('favoritesUpdated'));
+    if (user==null) {
+      navigate("/sign/in");
     } else {
-      showToast(`${watch.name} đã có trong danh sách yêu thích!`, "Thông tin", false);
+      if (!favoriteData.some((item) => item.id === watch.id)) {
+        const updatedFavorites = [...favoriteData, watch];
+        setFavoriteData(updatedFavorites);
+        localStorage.setItem("favoriteData", JSON.stringify(updatedFavorites));
+        showToast(`${watch.name} đã được thêm vào danh sách yêu thích!`, "Thành công", true);
+        window.dispatchEvent(new Event('favoritesUpdated'));
+      } else {
+        showToast(`${watch.name} đã có trong danh sách yêu thích!`, "Thông tin", false);
+      }
     }
   };
 
+
   const handleWatchDetail = (watch) => {
-    navigate(`/watch-detail/${watch.id}`, { state: { watch } });
+    navigate(`/watch-detail/${watch.id}`, { state: { watch} });
   };
 
   const showToast = (content, info, success) => {

@@ -8,28 +8,32 @@ import {faHeart, faPlus} from "@fortawesome/free-solid-svg-icons";
 import '../assets/styles/WatchDetail.scss';
 import MyToast from "../components/MyToast";
 import { useNavigate } from "react-router-dom";
+import { addToFavorites } from '../components/addToFavoriteUtil';
 
 const WatchDetail = () => {
+    const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
+    const [user, setUser] = useState(null)
     const location = useLocation();
     const { watch } = location.state || {};
     const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
     const [dataToast, setDataToast] = useState([]);
+    const navigate = useNavigate();
+
+
+    useEffect(()=>{
+        let payload = accessToken?.split(".")[1]
+        if (!payload)
+            return
+        let decodedPayload = JSON.parse(atob(payload))
+
+        setUser({
+            ...decodedPayload
+        })
+    }, [accessToken])
 
     if (!watch) {
         return <div>No watch data found.</div>;
     }
-
-    const addToFavorites = (watch) => {
-        if (!favoriteData.some((item) => item.id === watch.id)) {
-            const updatedFavorites = [...favoriteData, watch];
-            setFavoriteData(updatedFavorites);
-            localStorage.setItem("favoriteData", JSON.stringify(updatedFavorites));
-            showToast(`${watch.name} đã được thêm vào danh sách yêu thích!`, "Thành công", true);
-            window.dispatchEvent(new Event('favoritesUpdated'));
-        } else {
-            showToast(`${watch.name} đã có trong danh sách yêu thích!`, "Thông tin", false);
-        }
-    };
 
     const showToast = (content, info, success) => {
         setDataToast([
@@ -42,6 +46,11 @@ const WatchDetail = () => {
             }
         ]);
     };
+
+    const handleAddToFavorites = () => {
+        addToFavorites(watch, user, favoriteData, setFavoriteData, showToast, navigate);
+    };
+
 
     return (
         <div>
@@ -66,7 +75,7 @@ const WatchDetail = () => {
                     <Button variant="primary">
                         <FontAwesomeIcon icon={faPlus}/>
                     </Button>
-                    <Button variant="danger" onClick={() => addToFavorites(watch)}>
+                    <Button variant="danger" onClick={() => handleAddToFavorites(watch)}>
                         <FontAwesomeIcon icon={faHeart}/>
                     </Button>
                     <Button className="BuyBtn" variant="warning">
