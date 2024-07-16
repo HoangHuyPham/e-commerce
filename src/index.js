@@ -4,11 +4,11 @@ import "./assets/styles/index.scss";
 import App from "./views/App";
 import reportWebVitals from "./reportWebVitals";
 import {
-  createBrowserRouter,
-  RouterProvider,
-  createRoutesFromElements,
-  Route,
-  Navigate,
+    createBrowserRouter,
+    RouterProvider,
+    createRoutesFromElements,
+    Route,
+    Navigate, Routes,
 } from "react-router-dom";
 import Home from "./views/Home";
 import Panel from "./views/Panel";
@@ -48,6 +48,13 @@ const router = createBrowserRouter(
         <Route path="/watch/:id" element={<WatchDetail />} />
         <Route path="/favorites" element={<FavoriteWatches />} />
     </Route>
+
+    <Route path="/" element={<App />}>
+        <Route path="watch-list" element={<WatchList />} />
+        <Route path="/favorites" element={<FavoriteWatches />} />
+        <Route path="watch-detail/:id" element={<WatchDetail />} />
+    </Route>
+
 
       <Route path="*" element={<NotFound />} />
     </>

@@ -1,97 +1,100 @@
 // src/components/FavoriteWatches.js
 
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faPlus,
-    faHeart,
-    faMinus
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faHeart, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import MyToast from "../components/MyToast";
 import Footer from "../components/Footer";
 
-class FavoriteWatches extends Component {
-    state = {
-        favoriteData: JSON.parse(localStorage.getItem("favoriteData")) || [],
-        dataToast: [],
+const FavoriteWatches = () => {
+    const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
+    const [dataToast, setDataToast] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleFavoritesUpdated = () => {
+            setFavoriteData(JSON.parse(localStorage.getItem("favoriteData")) || []);
+        };
+
+        window.addEventListener('favoritesUpdated', handleFavoritesUpdated);
+
+        return () => {
+            window.removeEventListener('favoritesUpdated', handleFavoritesUpdated);
+        };
+    }, []);
+
+    const handleWatchDetail = (watch) => {
+        navigate(`/watch-detail/${watch.id}`, { state: { watch } });
     };
 
-    handleAddToCart = () => {
+    const handleAddToCart = () => {
+        // Add to cart logic here
+    };
 
-    }
-
-    handleRemoveFromFav = (watch) => {
-        const { favoriteData } = this.state;
+    const handleRemoveFromFav = (watch) => {
         const updatedFavorites = favoriteData.filter((item) => item.id !== watch.id);
-        this.setState({ favoriteData: updatedFavorites });
+        setFavoriteData(updatedFavorites);
         localStorage.setItem("favoriteData", JSON.stringify(updatedFavorites));
         window.dispatchEvent(new Event('favoritesUpdated'));
-        this.showToast(`${watch.name} đã bị xóa khỏi mục yêu thích.`, "Thành công", true);
+        showToast(`${watch.name} đã bị xóa khỏi mục yêu thích.`, "Thành công", true);
     };
 
-    showToast = (content, info, success) => {
-        this.setState({
-            dataToast: [
-                {
-                    id: new Date().getTime(),
-                    success: success,
-                    show: true,
-                    info: info,
-                    content: content,
-                },
-            ],
-        });
+    const showToast = (content, info, success) => {
+        setDataToast([
+            {
+                id: new Date().getTime(),
+                success: success,
+                show: true,
+                info: info,
+                content: content,
+            },
+        ]);
     };
 
-    render() {
-        const { favoriteData } = this.state;
-        return (
-            <>
-                <TopBar />
-                <MyToast data={this.state.dataToast} />
-                <div className="WatchList">
-                    <div className="FavoriteWatches">
-                        <span className="Title">Sản phẩm yêu thích</span>
-                        <div className="Content">
-                            {favoriteData.map((v, i) => (
-                                <Card key={i}>
-                                    <Link to={`/watch/${v.id}`}>
-                                        <Card.Img variant="top" src={v.url} />
-                                    </Link>
-                                    <Card.Body>
-                                        <Card.Title>{v.name}</Card.Title>
-                                        <Card.Text style={{ color: 'black' }}>{v.detail}</Card.Text>
-                                        <Card.Text>
-                                            {v.price.toLocaleString("vi-VN", {
-                                                style: "currency",
-                                                currency: "VND",
-                                            })}
-                                        </Card.Text>
-                                    </Card.Body>
-                                    <Card.Footer>
-                                        <Button variant="primary" onClick={this.handleAddToCart}>
-                                            <FontAwesomeIcon icon={faPlus} />
-                                        </Button>
-                                        <Button variant="danger" onClick={() => this.handleRemoveFromFav(v)}>
-                                            <FontAwesomeIcon icon={faMinus} />
-                                        </Button>
-                                        <Button className="BuyBtn" variant="warning">
-                                            Mua ngay
-                                        </Button>
-                                    </Card.Footer>
-                                </Card>
-                            ))}
-                        </div>
+    return (
+        <>
+            <TopBar />
+            <MyToast data={dataToast} />
+            <div className="WatchList">
+                <div className="FavoriteWatches">
+                    <span className="Title">Sản phẩm yêu thích</span>
+                    <div className="Content">
+                        {favoriteData.map((v, i) => (
+                            <Card key={i}>
+                                <Card.Img onClick={() => handleWatchDetail(v)} variant="top" src={v.url} />
+                                <Card.Body>
+                                    <Card.Title>{v.name}</Card.Title>
+                                    <Card.Text style={{ color: 'black' }}>{v.detail}</Card.Text>
+                                    <Card.Text>
+                                        {v.price.toLocaleString("vi-VN", {
+                                            style: "currency",
+                                            currency: "VND",
+                                        })}
+                                    </Card.Text>
+                                </Card.Body>
+                                <Card.Footer>
+                                    <Button variant="primary" onClick={handleAddToCart}>
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </Button>
+                                    <Button variant="danger" onClick={() => handleRemoveFromFav(v)}>
+                                        <FontAwesomeIcon icon={faMinus} />
+                                    </Button>
+                                    <Button className="BuyBtn" variant="warning">
+                                        Mua ngay
+                                    </Button>
+                                </Card.Footer>
+                            </Card>
+                        ))}
                     </div>
                 </div>
-                <Footer/>
-            </>
-        );
-    }
-}
+            </div>
+            <Footer />
+        </>
+    );
+};
 
 export default FavoriteWatches;

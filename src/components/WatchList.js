@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 import MyToast from "../components/MyToast";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const WatchList = () => {
   const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
@@ -67,6 +67,8 @@ const WatchList = () => {
     }
   ]);
 
+  const navigate = useNavigate();
+
   const handleAddToCart = (params) => {
     // add-to-cart logic here
   }
@@ -81,6 +83,10 @@ const WatchList = () => {
     } else {
       showToast(`${watch.name} đã có trong danh sách yêu thích!`, "Thông tin", false);
     }
+  };
+
+  const handleWatchDetail = (watch) => {
+    navigate(`/watch-detail/${watch.id}`, { state: { watch } });
   };
 
   const showToast = (content, info, success) => {
@@ -103,9 +109,7 @@ const WatchList = () => {
           {data.map((watch, i) => {
             return (
                 <Card key={i}>
-                  <Link to={`/watch/${watch.id}`}>
-                    <Card.Img variant="top" src={watch.url} />
-                  </Link>
+                    <Card.Img onClick={() => handleWatchDetail(watch)} variant="top" src={watch.url} />
                   <Card.Body>
                     <Card.Title>{watch.name}</Card.Title>
                     <Card.Text style={{ color: 'black' }}>{watch.detail}</Card.Text>
