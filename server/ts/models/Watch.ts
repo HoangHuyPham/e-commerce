@@ -1,11 +1,8 @@
 import {
-  DataTypes,
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  NonAttribute,
+  DataTypes, InferAttributes,
+  InferCreationAttributes, Model, NonAttribute
 } from '@sequelize/core';
-import { Attribute, PrimaryKey, AutoIncrement, NotNull, HasOne, BelongsTo } from '@sequelize/core/decorators-legacy';
+import { Attribute, AutoIncrement, BelongsTo, NotNull, PrimaryKey } from '@sequelize/core/decorators-legacy';
 import { Image } from './Image';
 
 
@@ -25,6 +22,9 @@ export class Watch extends Model<InferAttributes<Watch>, InferCreationAttributes
 
   @Attribute(DataTypes.DOUBLE)
   declare price: string | 0;
+
+  @Attribute(DataTypes.INTEGER)
+  declare category: number | -1;
 
   @BelongsTo(() => Image, 'previewId')
   declare preview?: NonAttribute<Image>;

@@ -13,5 +13,8 @@ const limitSize = (req, resp, next) => {
             next();
         }
     }
+    else {
+        resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+    }
 };
 exports.limitSize = limitSize;

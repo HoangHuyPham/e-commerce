@@ -20,6 +20,7 @@ import WatchList from "./components/WatchList";
 import WatchDetail from "./views/WatchDetail";
 import FavoriteWatches from "./views/FavoriteWatches";
 import DashBoard from "./views/DashBoard";
+import ProductPanel from "./views/ProductPanel";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -28,10 +29,14 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<Home />} />
-        <Route path="dashboard" element={<DashBoard />} />
       </Route>
 
-      <Route path="sign" element={<SignInOut />}>
+      <Route path="/dashboard" element={<DashBoard />}>
+        <Route index element={<Navigate to="products" />} />
+        <Route path="products" element={<ProductPanel />} />
+      </Route>
+
+      <Route path="/sign" element={<SignInOut />}>
         <Route index element={<Navigate to="in" />} />
         <Route path="in" element={<SignIn />} />
         <Route path="up" element={<SignUp />} />
@@ -44,7 +49,6 @@ const router = createBrowserRouter(
       </Route>
 
     <Route>
-        <Route path="/" element={<WatchList />} />
         <Route path="/watch/:id" element={<WatchDetail />} />
         <Route path="/favorites" element={<FavoriteWatches />} />
     </Route>

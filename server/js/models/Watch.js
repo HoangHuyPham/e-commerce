@@ -29,6 +29,9 @@ __decorate([
     (0, decorators_legacy_1.Attribute)(core_1.DataTypes.DOUBLE)
 ], Watch.prototype, "price", void 0);
 __decorate([
+    (0, decorators_legacy_1.Attribute)(core_1.DataTypes.INTEGER)
+], Watch.prototype, "category", void 0);
+__decorate([
     (0, decorators_legacy_1.BelongsTo)(() => Image_1.Image, 'previewId')
 ], Watch.prototype, "preview", void 0);
 __decorate([

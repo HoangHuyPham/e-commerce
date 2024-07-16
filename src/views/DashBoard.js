@@ -1,6 +1,12 @@
+import { faProductHunt } from "@fortawesome/free-brands-svg-icons";
+import {
+  faCaretLeft, faTable,
+  faUser
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import "../assets/styles/App.scss";
 import MyToast from "../components/MyToast";
 import { ResponseStatus } from "../ResponseStatus";
@@ -10,7 +16,8 @@ function DashBoard() {
   const [userInfo, setUserInfo] = useState({});
   const [dataToast, setDataToast] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [selectTab, setSelectTab] = useState("products"); // users || orders
+  const [isEmpty, setEmpty] = useState(true);
 
   useEffect(() => {
     updateInfo();
@@ -53,15 +60,48 @@ function DashBoard() {
           <h1>Dashboard</h1>
           <hr></hr>
           <section className="ListItem">
-            <ul id="myMenu">
+            <ul className="Menu">
               <li>
-                <Button variant="dark">Product</Button>
+                <Button
+                  className={selectTab === "products" && "bluesky"}
+                  onClick={(e) => navigate("products")}
+                >
+                  <FontAwesomeIcon icon={faProductHunt} />
+                  <span>Products</span>
+                </Button>
               </li>
               <li>
-                <Link to="#">Customer</Link>
+                <Button
+                  className={selectTab === "users" && "bluesky"}
+                  onClick={(e) => navigate("users")}
+                >
+                  <FontAwesomeIcon icon={faUser} />
+                  <span>Users</span>
+                </Button>
+              </li>
+              <li>
+                <Button
+                  className={selectTab === "orders" && "bluesky"}
+                  onClick={(e) => navigate("orders")}
+                >
+                  <FontAwesomeIcon icon={faTable} />
+                  <span>Orders</span>
+                </Button>
+              </li>
+              <li>
+                <Button
+                  onClick={(e) => navigate("/home")}
+                >
+                  <FontAwesomeIcon icon={faCaretLeft} />
+                  <span>Home</span>
+                </Button>
               </li>
             </ul>
           </section>
+        </div>
+
+        <div className="Right">
+          <Outlet/>
         </div>
       </div>
     </>

@@ -1,4 +1,6 @@
 import React from "react";
+import "../assets/styles/Editor.scss"
+import userDefault from "../assets/images/userDefault.png"
 
 function AvatarEditor({ setDataToast, updateInfo, userInfo }) {
   
@@ -48,14 +50,14 @@ function AvatarEditor({ setDataToast, updateInfo, userInfo }) {
   };
   return (
     <section
-      className="avatar"
+      className="avatar editor"
       onClick={() =>
         document.getElementsByClassName("input_sender")[0].click()
       }
     >
       <img
         className="avatar_container"
-        src={userInfo.url}
+        src={userInfo.url || userDefault}
         alt="avatar"
         loading="lazy"
       ></img>

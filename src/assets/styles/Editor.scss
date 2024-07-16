@@ -1,0 +1,67 @@
+body{
+
+    .avatar{
+        &:hover::after {
+            content: "Thay đổi";
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 100%;
+            height: 100%;
+            border-radius: 50% 50%;
+            font-size: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+    }
+
+    .preview{
+        &:hover::after {
+            content: "Thay đổi";
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 100%;
+            height: 100%;
+            font-size: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+       
+    }
+
+    .avatar,.editor {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        cursor: pointer;
+
+        .spinner-border{
+            position: absolute;
+            bottom: 0;
+        }
+
+        .preview_container{
+            width: 150px;
+            height: 150px;
+        }
+
+        .avatar_container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50% 50%;
+        }
+
+        .avatar_sender, .preview_sender {
+            display: none;
+        }
+    }
+}
