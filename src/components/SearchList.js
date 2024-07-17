@@ -307,9 +307,9 @@ function SearchList() {
             products.map((watch, i) => {
               return (
                 <Card key={i}>
-                  <Link to={`/watch/${watch.id}`}>
-                    <Card.Img variant="top" src={watch?.preview?.url} />
-                  </Link>
+               
+                    <Card.Img onClick={()=>{navigate(`/watch-detail/${watch.id}`, { state: { watch } })}} variant="top" src={watch?.preview?.url} />
+                  
                   <Card.Body>
                     <Card.Title>{watch.name}</Card.Title>
                     <Card.Text>

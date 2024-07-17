@@ -54,9 +54,6 @@ const router = createBrowserRouter(
         <Route path="up" element={<SignUp />} />
       </Route>
 
-      <Route path="/watch/:id" element={<WatchDetail />} />
-      <Route path="/favorites" element={<FavoriteWatches />} />
-
       <Route path="*" element={<NotFound />} />
     </>
     )
