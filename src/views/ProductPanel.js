@@ -405,12 +405,6 @@ function ProductPanel() {
     <>
       <Loading loading={loading}/>
       <MyToast data={dataToast} />
-      {/* {isEmpty && (
-        <EmptyContainer
-          title={"Chưa có sản phẩm nào tồn tại"}
-          buttonTitle={"Thêm sản phẩm mới"}
-        />
-      )} */}
 
       <Table className="TableProduct" striped bordered hover variant="dark">
         <thead>

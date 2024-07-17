@@ -170,12 +170,12 @@ const WatchList = () => {
               data.map((watch, i) => (
                   <Card key={i}>
                       <div onClick={() => handleWatchDetail(watch)} className="card-img-container">
-                    <Card.Img className="card-img" variant="top" src={watch.preview.url} />
+                    <Card.Img className="card-img" variant="top" src={watch?.preview?.url} />
                       </div>
                     <Card.Body>
                       <Card.Title>{watch.name}</Card.Title>
                       <Card.Text style={{ color: 'black' }}>{watch.detail}</Card.Text>
-                      <Card.Text>{watch.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Card.Text>
+                      <Card.Text>{watch.price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Card.Text>
                     </Card.Body>
                     <Card.Footer>
                       <Button variant="primary"><FontAwesomeIcon icon={faShoppingCart} /></Button>

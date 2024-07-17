@@ -5,6 +5,38 @@ $MAIN_COLOR_FADE: rgb(69, 68, 68, 0.5);
 body {
     background-color: #f5f5f5;
 
+    .SearchPage{
+        padding: 10vh 0 0;
+
+        .card-img-top{
+            max-height: 300px;
+            min-height: 300px;
+        }
+        .Pagination{
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .Filter{
+            padding: 20px 50px;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            gap: 10px;
+            .Item{
+                min-width: 200px;
+                max-width: 300px;
+                .input-group-text{
+                    color: white;
+                    background-color: $MAIN_COLOR;
+                }
+            }
+        }
+    }
+
+
+
     .DashBoardPage{
         display: flex;
 
@@ -172,6 +204,7 @@ body {
     }
 
     .TopBar {
+        top: 0;
         display: flex;
         position: fixed;
         padding: 0 15px 0;
@@ -272,7 +305,9 @@ body {
         }
     }
 
-    .WatchList {
+
+
+    .WatchList, .SearchList {
         display: flex;
         flex-direction: column;
         box-sizing: border-box;

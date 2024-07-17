@@ -1,10 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {
-  createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider
+  createBrowserRouter,
+  createRoutesFromElements,
+  Navigate,
+  Route,
+  RouterProvider
 } from "react-router-dom";
 import "./assets/styles/index.scss";
 import reportWebVitals from "./reportWebVitals";
+import AppProvider from "./stores/providers/AppProvider";
 import App from "./views/App";
 import DashBoard from "./views/DashBoard";
 import FavoriteWatches from "./views/FavoriteWatches";
@@ -12,7 +17,7 @@ import Home from "./views/Home";
 import Info from "./views/Info";
 import NotFound from "./views/NotFound";
 import ProductPanel from "./views/ProductPanel";
-// import SearchPage from "./views/SearchPage";
+import SearchPage from "./views/SearchPage";
 import SignIn from "./views/SignIn";
 import SignInOut from "./views/SignInUp";
 import SignUp from "./views/SignUp";
@@ -26,11 +31,10 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<Home />} />
-          {/* <Route path="search" element={<SearchPage />} />
-      </Route> */}
-          <Route path="watch-list" element={<WatchList />} />
-          <Route path="watch-detail/:id" element={<WatchDetail />} />
-          <Route path="favorites" element={<FavoriteWatches />} />
+        <Route path="search" element={<SearchPage />} />
+        <Route path="watch-list" element={<WatchList />} />
+        <Route path="watch-detail/:id" element={<WatchDetail />} />
+        <Route path="favorites" element={<FavoriteWatches />} />
       </Route>
 
       <Route path="/dashboard" element={<DashBoard />}>
@@ -50,20 +54,20 @@ const router = createBrowserRouter(
         <Route path="up" element={<SignUp />} />
       </Route>
 
-        <Route path="/watch/:id" element={<WatchDetail />} />
-        <Route path="/favorites" element={<FavoriteWatches />} />
+      <Route path="/watch/:id" element={<WatchDetail />} />
+      <Route path="/favorites" element={<FavoriteWatches />} />
 
       <Route path="*" element={<NotFound />} />
     </>
-  )
+    )
 );
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <AppProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </AppProvider>
   </React.StrictMode>
-
-
 );
 
 // If you want to start measuring performance in your app, pass a function

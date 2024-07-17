@@ -71,24 +71,8 @@ function DashBoard() {
                   <span>Products</span>
                 </Button>
               </li>
-              <li>
-                <Button
-                  className={selectTab === "users" && "bluesky"}
-                  onClick={(e) => navigate("users")}
-                >
-                  <FontAwesomeIcon icon={faUser} />
-                  <span>Users</span>
-                </Button>
-              </li>
-              <li>
-                <Button
-                  className={selectTab === "orders" && "bluesky"}
-                  onClick={(e) => navigate("orders")}
-                >
-                  <FontAwesomeIcon icon={faTable} />
-                  <span>Orders</span>
-                </Button>
-              </li>
+          
+              
               <li>
                 <Button
                   onClick={(e) => navigate("/home")}
