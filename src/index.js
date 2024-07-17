@@ -53,6 +53,13 @@ const router = createBrowserRouter(
         <Route path="/favorites" element={<FavoriteWatches />} />
     </Route>
 
+    <Route path="/" element={<App />}>
+        <Route path="watch-list" element={<WatchList />} />
+        <Route path="/favorites" element={<FavoriteWatches />} />
+        <Route path="watch-detail/:id" element={<WatchDetail />} />
+    </Route>
+
+
       <Route path="*" element={<NotFound />} />
     </>
   )
