@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faHeart, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faShoppingCart, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
@@ -57,18 +57,19 @@ const FavoriteWatches = () => {
 
     return (
         <>
-            <TopBar />
+
             <MyToast data={dataToast} />
             <div className="WatchList">
-                <div className="FavoriteWatches">
-                    <span className="Title">Sản phẩm yêu thích</span>
+                    <span className="TitleDetail">Sản phẩm yêu thích</span>
                     <div className="Content">
                         {favoriteData.map((v, i) => (
                             <Card key={i}>
-                                <Card.Img onClick={() => handleWatchDetail(v)} variant="top" src={v.url} />
+                                <div onClick={() => handleWatchDetail(v)} className="card-img-container">
+                                    <Card.Img className="card-img" variant="top" src={v.preview.url}/>
+                                </div>
                                 <Card.Body>
                                     <Card.Title>{v.name}</Card.Title>
-                                    <Card.Text style={{ color: 'black' }}>{v.detail}</Card.Text>
+                                    <Card.Text style={{color: 'black'}}>{v.detail}</Card.Text>
                                     <Card.Text>
                                         {v.price.toLocaleString("vi-VN", {
                                             style: "currency",
@@ -78,10 +79,10 @@ const FavoriteWatches = () => {
                                 </Card.Body>
                                 <Card.Footer>
                                     <Button variant="primary" onClick={handleAddToCart}>
-                                        <FontAwesomeIcon icon={faPlus} />
+                                        <FontAwesomeIcon icon={faShoppingCart}/>
                                     </Button>
                                     <Button variant="danger" onClick={() => handleRemoveFromFav(v)}>
-                                        <FontAwesomeIcon icon={faMinus} />
+                                        <FontAwesomeIcon icon={faMinus}/>
                                     </Button>
                                     <Button className="BuyBtn" variant="warning">
                                         Mua ngay
@@ -90,9 +91,8 @@ const FavoriteWatches = () => {
                             </Card>
                         ))}
                     </div>
-                </div>
             </div>
-            <Footer />
+
         </>
     );
 };

@@ -69,7 +69,7 @@ function TopBar() {
 
   return (
       <div className="TopBar">
-        <img src={logo} alt="logo" style={{height: '100%', width: 'auto'}} onClick={handleHome} />
+        <img src={logo} alt="logo" onClick={handleHome} />
         <section className="SearchBar">
           <input
               className="SearchInput"

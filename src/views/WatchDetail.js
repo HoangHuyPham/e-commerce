@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import Card from "react-bootstrap/Card";
 import {Button} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faHeart, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 import '../assets/styles/WatchDetail.scss';
 import MyToast from "../components/MyToast";
 import { useNavigate } from "react-router-dom";
@@ -54,11 +54,11 @@ const WatchDetail = () => {
 
     return (
         <div>
-            <span className="Title">Chi tiết sản phẩm</span>
+            <span className="TitleDetail">Chi tiết sản phẩm</span>
             <div className="WatchDetail">
                 <MyToast data={dataToast}/>
                 <div className="image">
-                    <Card.Img src={watch.url}/>
+                    <Card.Img src={watch.preview.url}/>
                 </div>
                 <div className="details">
                     <div className="title">{watch.name}</div>
@@ -73,10 +73,10 @@ const WatchDetail = () => {
                 </div>
                 <div className="actions">
                     <Button variant="primary">
-                        <FontAwesomeIcon icon={faPlus}/>
+                        <FontAwesomeIcon icon={faShoppingCart}/> Thêm vào vỏ hàng
                     </Button>
                     <Button variant="danger" onClick={() => handleAddToFavorites(watch)}>
-                        <FontAwesomeIcon icon={faHeart}/>
+                        <FontAwesomeIcon icon={faHeart}/>  Yêu thích
                     </Button>
                     <Button className="BuyBtn" variant="warning">
                         Mua ngay

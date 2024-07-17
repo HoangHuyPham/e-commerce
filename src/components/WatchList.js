@@ -1,80 +1,124 @@
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 import MyToast from "../components/MyToast";
 import { useNavigate } from "react-router-dom";
+import Pagination from "react-bootstrap/Pagination";
+import {ResponseStatus} from "../ResponseStatus";
 
 const WatchList = () => {
   const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
   const [dataToast, setDataToast] = useState([]);
   const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
-  const [data, setData] = useState([
-    {
-      id: 1,
-      name: "Đồng Hồ 1",
-      detail: "Chi tiết đồng hồ 1",
-      price: 2000000,
-      category: "Luxury",
-      previewId: "1a",
-      createdAt: "2023-01-01",
-      updatedAt: "2023-06-01",
-      url: "https://shopdongho.com.vn/cdn/shop/files/dong-ho-mvmt-revolver-D-MR01-GML_78e7ac1b-14e7-4599-89a6-a890f07da32c_360x.jpg?v=1711619479"
-    },
-    {
-      id: 2,
-      name: "Đồng Hồ 2",
-      detail: "Chi tiết đồng hồ 2",
-      price: 2400000,
-      category: "Sport",
-      previewId: "2b",
-      createdAt: "2023-02-01",
-      updatedAt: "2023-06-01",
-      url: "https://shopdongho.com.vn/cdn/shop/files/dong-ho-mvmt-chrono-D-MC01BL_385b7508-debf-4443-9573-8202c710eca5_360x.jpg?v=1711619454"
-    },
-    {
-      id: 3,
-      name: "Đồng Hồ 3",
-      detail: "Chi tiết đồng hồ 3",
-      price: 12000000,
-      category: "Classic",
-      previewId: "3c",
-      createdAt: "2023-03-01",
-      updatedAt: "2023-06-01",
-      url: "https://shopdongho.com.vn/cdn/shop/files/dong-ho-mvmt-nova-D-FC01-S_41b309db-5795-4013-88a0-30c3013b3921_360x.jpg?v=1711619415"
-    },
-    {
-      id: 4,
-      name: "Đồng Hồ 4",
-      detail: "Chi tiết đồng hồ 4",
-      price: 1000000,
-      category: "Casual",
-      previewId: "4d",
-      createdAt: "2023-04-01",
-      updatedAt: "2023-06-01",
-      url: "https://shopdongho.com.vn/cdn/shop/files/dong-ho-olym-pianus-op89322k-t-nam-quartz-day-inox-thep-khong-gi-05-2023_360x.jpg?v=1711576474"
-    },
-    {
-      id: 5,
-      name: "Đồng Hồ 5",
-      detail: "Chi tiết đồng hồ 5",
-      price: 500000,
-      category: "Digital",
-      previewId: "5e",
-      createdAt: "2023-05-01",
-      updatedAt: "2023-06-01",
-      url: "https://shopdongho.com.vn/cdn/shop/files/dong-ho-mvmt-mod-D-FB01-BLBL_a90add3e-8e93-47e8-b71f-58b813a99a63_360x.jpg?v=1711619409"
+  const [pagination, setPagination] = useState({
+    min: -1,
+    max: -1,
+  });
+  const [currentOffset, setOffset] = useState(-1);
+
+  const fetchData = async () => {
+    setLoading(true)
+    if (currentOffset === -1){
+      setLoading(false)
+      return;
     }
-  ]);
 
-  const handleAddToCart = (params) => {
-    // add-to-cart logic here
-  }
+    try {
+      fetch(`http://localhost:3001/api/v1/products/${currentOffset}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+          .then((e) => e.json())
+          .then((data) => {
+            if (
+                data.status === ResponseStatus.EXPIRED_TOKEN ||
+                data.status === ResponseStatus.UNAUTHORIZED
+            ) {
+              navigate("sign/in");
+              return;
+            }
+            setData([...data.data]);
+          })
+          .catch((err) => {
+            console.log(err);
+          }).finally(()=>{
+        setTimeout(() => {
+          setLoading(false)
+        }, 100);
+      });
+    } catch (error) {
+      console.error(error);
+      navigate("sign/in");
+    }
+  };
 
-  useEffect(()=>{
+  const getPaginationItem = () => {
+    let items = [];
+    let min =
+        currentOffset - 1 < pagination.min ? currentOffset : currentOffset - 1;
+    let max =
+        currentOffset + 1 > pagination.max ? currentOffset : currentOffset + 1;
+    for (let number = min + 1; number <= max + 1; number++) {
+      items.push(
+          <Pagination.Item
+              key={number}
+              onClick={() => {
+                setOffset(number - 1);
+              }}
+              active={number === currentOffset + 1}
+          >
+            {number}
+          </Pagination.Item>
+      );
+    }
+    return items;
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentOffset]);
+
+  useEffect(() => {
+    updatePagination();
+  }, []);
+
+  const updatePagination = async () => {
+    try {
+      await fetch(`http://localhost:3001/api/v1/products`, {
+        method: "GET",
+      })
+          .then((e) => e.json())
+          .then((data) => {
+            if (
+                data.status === ResponseStatus.EXPIRED_TOKEN ||
+                data.status === ResponseStatus.UNAUTHORIZED
+            ) {
+              navigate("sign/in");
+              return;
+            }
+            setPagination({ ...data.data });
+            if (data.data.min >= 0) {
+              setOffset(0);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    } catch (error) {
+      console.error(error);
+      navigate("sign/in");
+    }
+  };
+
+  useEffect(() => {
     let payload = accessToken?.split(".")[1]
     if (!payload)
       return
@@ -83,10 +127,10 @@ const WatchList = () => {
     setUser({
       ...decodedPayload
     })
-  }, [accessToken])
+  }, [accessToken]);
 
   const addToFavorites = (watch) => {
-    if (user==null) {
+    if (user == null) {
       navigate("/sign/in");
     } else {
       if (!favoriteData.some((item) => item.id === watch.id)) {
@@ -101,9 +145,8 @@ const WatchList = () => {
     }
   };
 
-
   const handleWatchDetail = (watch) => {
-    navigate(`/watch-detail/${watch.id}`, { state: { watch} });
+    navigate(`/watch-detail/${watch.id}`, { state: { watch } });
   };
 
   const showToast = (content, info, success) => {
@@ -123,29 +166,46 @@ const WatchList = () => {
         <MyToast data={dataToast} />
         <span className="Title">Sản phẩm bán chạy</span>
         <div className="Content">
-          {data.map((watch, i) => {
-            return (
-                <Card key={i}>
-                    <Card.Img onClick={() => handleWatchDetail(watch)} variant="top" src={watch.url} />
-                  <Card.Body>
-                    <Card.Title>{watch.name}</Card.Title>
-                    <Card.Text style={{ color: 'black' }}>{watch.detail}</Card.Text>
-                    <Card.Text>{watch.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <Button variant="primary"><FontAwesomeIcon icon={faPlus} /></Button>
-                    <Button
-                        variant="danger"
-                        onClick={() => addToFavorites(watch)}
-                    >
-                      <FontAwesomeIcon icon={faHeart} />
-                    </Button>
-                    <Button className="BuyBtn" variant="warning">Mua ngay</Button>
-                  </Card.Footer>
-                </Card>
-            );
-          })}
+          {Array.isArray(data) && data.length > 0 ? (
+              data.map((watch, i) => (
+                  <Card key={i}>
+                      <div onClick={() => handleWatchDetail(watch)} className="card-img-container">
+                    <Card.Img className="card-img" variant="top" src={watch.preview.url} />
+                      </div>
+                    <Card.Body>
+                      <Card.Title>{watch.name}</Card.Title>
+                      <Card.Text style={{ color: 'black' }}>{watch.detail}</Card.Text>
+                      <Card.Text>{watch.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Card.Text>
+                    </Card.Body>
+                    <Card.Footer>
+                      <Button variant="primary"><FontAwesomeIcon icon={faShoppingCart} /></Button>
+                      <Button
+                          variant="danger"
+                          onClick={() => addToFavorites(watch)}
+                      >
+                        <FontAwesomeIcon icon={faHeart} />
+                      </Button>
+                      <Button className="BuyBtn" variant="warning">Mua ngay</Button>
+                    </Card.Footer>
+                  </Card>
+              ))
+          ) : (
+              <div>No data available</div>
+          )}
         </div>
+        <Pagination className="Pagination">
+          <Pagination.First
+              onClick={() => {
+                setOffset(pagination.min);
+              }}
+          />
+          {getPaginationItem(currentOffset)}
+          <Pagination.Last
+              onClick={() => {
+                setOffset(pagination.max);
+              }}
+          />
+        </Pagination>
       </div>
   );
 }
