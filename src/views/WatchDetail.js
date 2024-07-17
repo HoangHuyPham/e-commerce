@@ -1,97 +1,90 @@
-import React, { useEffect, useState } from "react";
-import TopBar from "../components/TopBar";
-import "../assets/styles/WatchDetail.scss";
-import { Button } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import Card from "react-bootstrap/Card";
+import {Button} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faHeart, faPlus} from "@fortawesome/free-solid-svg-icons";
+import '../assets/styles/WatchDetail.scss';
+import MyToast from "../components/MyToast";
+import { useNavigate } from "react-router-dom";
+import { addToFavorites } from '../components/addToFavoriteUtil';
 
-function WatchDetail({ data }) {
-    const { id } = useParams();
-    const [watch, setWatch] = useState(null);
-    const [isFavorite, setIsFavorite] = useState(false);
+const WatchDetail = () => {
+    const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
+    const [user, setUser] = useState(null)
+    const location = useLocation();
+    const { watch } = location.state || {};
+    const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
+    const [dataToast, setDataToast] = useState([]);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        if (data && data.length > 0) {
-            const foundWatch = data.find((item) => item.id === parseInt(id));
-            if (foundWatch) {
-                setWatch(foundWatch);
-            } else {
-                setWatch(null);
-            }
-        }
-    }, [data, id]);
 
-    const addToFavorites = (watch) => {
-        const favoriteData = JSON.parse(localStorage.getItem("favoriteData")) || [];
-        const updatedFavorites = [...favoriteData, watch];
-        localStorage.setItem("favoriteData", JSON.stringify(updatedFavorites));
-        toast.success(`${watch.name} đã được thêm vào danh sách yêu thích!`);
-        setIsFavorite(true);
-        window.dispatchEvent(new Event('favoritesUpdated'));
-    };
+    useEffect(()=>{
+        let payload = accessToken?.split(".")[1]
+        if (!payload)
+            return
+        let decodedPayload = JSON.parse(atob(payload))
 
-    const removeFromFavorites = (watch) => {
-        const favoriteData = JSON.parse(localStorage.getItem("favoriteData")) || [];
-        const updatedFavorites = favoriteData.filter((item) => item.id !== watch.id);
-        localStorage.setItem("favoriteData", JSON.stringify(updatedFavorites));
-        toast.success(`${watch.name} đã được xóa khỏi danh sách yêu thích!`);
-        setIsFavorite(false);
-        window.dispatchEvent(new Event('favoritesUpdated'));
-    };
+        setUser({
+            ...decodedPayload
+        })
+    }, [accessToken])
 
     if (!watch) {
-        return <div>Đồng hồ không tồn tại</div>;
+        return <div>No watch data found.</div>;
     }
 
+    const showToast = (content, info, success) => {
+        setDataToast([
+            {
+                id: new Date().getTime(),
+                success: success,
+                show: true,
+                info: info,
+                content: content,
+            }
+        ]);
+    };
+
+    const handleAddToFavorites = () => {
+        addToFavorites(watch, user, favoriteData, setFavoriteData, showToast, navigate);
+    };
+
+
     return (
-        <>
-            <TopBar />
-            <div className="watch-detail-container">
-                <div className="watch-detail">
-                    <div className="watch-detail-left">
-                        <img src={watch.link} alt={watch.name} />
+        <div>
+            <span className="Title">Chi tiết sản phẩm</span>
+            <div className="WatchDetail">
+                <MyToast data={dataToast}/>
+                <div className="image">
+                    <Card.Img src={watch.url}/>
+                </div>
+                <div className="details">
+                    <div className="title">{watch.name}</div>
+                    <div className="info">{watch.detail}</div>
+                    <div className="price">
+                        {watch.price ? watch.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'}) : ''}
                     </div>
-                    <div className="watch-detail-center">
-                        <h1>{watch.name}</h1>
-                        <h2>{watch.detail}</h2>
-                        <p>
-                            {watch.price.toLocaleString("vi-VN", {
-                                style: "currency",
-                                currency: "VND",
-                            })}
-                        </p>
-                        <p>Ngày tạo: {watch.createdAt}</p>
-                        <p>Ngày cập nhật: {watch.updatedAt}</p>
-                    </div>
-                    <div className="watch-detail-right">
-                        <div className="bottom-buttons">
-                            <Button variant="primary">
-                                <FontAwesomeIcon icon={faPlus} /> Thêm vào giỏ hàng
-                            </Button>
-                            {isFavorite ? (
-                                <Button
-                                    variant="danger"
-                                    onClick={() => removeFromFavorites(watch)}
-                                >
-                                    <FontAwesomeIcon icon={faMinus} /> Xóa khỏi yêu thích
-                                </Button>
-                            ) : (
-                                <Button variant="danger" onClick={() => addToFavorites(watch)}>
-                                    <FontAwesomeIcon icon={faHeart} /> Thêm vào yêu thích
-                                </Button>
-                            )}
-                            <Button className="BuyBtn" variant="warning">
-                                Mua ngay
-                            </Button>
-                        </div>
+                    <div className="timestamps">
+                        <div>Created: {watch.createdAt}</div>
+                        <div>Updated: {watch.updatedAt}</div>
                     </div>
                 </div>
+                <div className="actions">
+                    <Button variant="primary">
+                        <FontAwesomeIcon icon={faPlus}/>
+                    </Button>
+                    <Button variant="danger" onClick={() => handleAddToFavorites(watch)}>
+                        <FontAwesomeIcon icon={faHeart}/>
+                    </Button>
+                    <Button className="BuyBtn" variant="warning">
+                        Mua ngay
+                    </Button>
+                </div>
             </div>
-        </>
+        </div>
     );
-}
+};
 
 export default WatchDetail;
