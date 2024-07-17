@@ -17,6 +17,12 @@ namespace productService {
         return new Promise(resolve => resolve({min, max, size:LIMIT}))
     }
 
+    export const deleteProductById = (id: number) =>{
+        return Watch.destroy({
+            where: {id}
+        })
+    }
+
     export const getAllProducts = (offset: number = 0, limit:number = LIMIT) => {
         return Watch.findAll({
             include: [

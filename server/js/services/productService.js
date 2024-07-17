@@ -48,6 +48,11 @@ var productService;
         });
         return new Promise(resolve => resolve({ min, max, size: LIMIT }));
     });
+    productService.deleteProductById = (id) => {
+        return Watch_1.Watch.destroy({
+            where: { id }
+        });
+    };
     productService.getAllProducts = (offset = 0, limit = LIMIT) => {
         return Watch_1.Watch.findAll({
             include: [

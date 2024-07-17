@@ -3,7 +3,7 @@ import multer from "multer";
 import { authMeGet, authMePost } from "../controllers/authMe";
 import { changePassword } from "../controllers/changePassword";
 import { loginController } from "../controllers/login";
-import { addProductPost, productGet, productGetPagination, updateProductPost } from "../controllers/product";
+import { addProductPost, deleteProductPost, productGet, productGetPagination, updateProductPost } from "../controllers/product";
 import { signUpController } from "../controllers/signUp";
 import { uploadAvatar, uploadPreview } from "../controllers/upload";
 import { auth } from "../middlewares/auth";
@@ -33,6 +33,7 @@ apiRouter.post("/auth/me/change_password", changePassword)
 
 apiRouter.post("/products/add" ,isAdmin, addProductPost)
 apiRouter.post("/products/update" ,isAdmin, updateProductPost)
+apiRouter.post("/products/delete" ,isAdmin, deleteProductPost)
 apiRouter.post("/auth/upload/preview/:id", isAdmin, multerFilter, limitSize, uploadPreview)
 apiRouter.post("/auth/upload/avatar", multerFilter, limitSize, uploadAvatar)
 

@@ -83,3 +83,17 @@ export const updateProductPost = (req: Request, resp: Response): void => {
     })
 }
 
+export const deleteProductPost = (req: Request, resp: Response): void => {
+    let id:number = req?.body?.id as number
+
+    if (!id){
+        resp.json({ status: ResponseStatus.FAILED, data: {} } as ResponseData)
+        return
+    }
+
+    productService.deleteProductById(id).then(e=>{
+        resp.json({ status: ResponseStatus.SUCCESS, data: {} } as ResponseData)
+    }).catch(err=>{
+        resp.json({ status: ResponseStatus.FAILED, data: {} } as ResponseData)
+    })
+}

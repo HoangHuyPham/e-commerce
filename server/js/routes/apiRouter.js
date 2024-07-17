@@ -27,6 +27,7 @@ apiRouter.get("/products", product_1.productGetPagination);
 apiRouter.post("/auth/me/change_password", changePassword_1.changePassword);
 apiRouter.post("/products/add", isAdmin_1.isAdmin, product_1.addProductPost);
 apiRouter.post("/products/update", isAdmin_1.isAdmin, product_1.updateProductPost);
+apiRouter.post("/products/delete", isAdmin_1.isAdmin, product_1.deleteProductPost);
 apiRouter.post("/auth/upload/preview/:id", isAdmin_1.isAdmin, multerFilter, limitSize_1.limitSize, upload_1.uploadPreview);
 apiRouter.post("/auth/upload/avatar", multerFilter, limitSize_1.limitSize, upload_1.uploadAvatar);
 exports.default = apiRouter;

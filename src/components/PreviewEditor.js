@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import "../assets/styles/Editor.scss";
 
@@ -46,9 +46,11 @@ function PreviewEditor({ data, setPreviewHandle, setDataToast }) {
           .then((e) => e.json())
           .then((e) => {
             setTimeout(() => {
-              if (setPreviewHandle)
+              if (setPreviewHandle){
+                console.log(e.data.url)
                 setPreviewHandle(id, {url: e.data.url, idPreview: e.data.id});
-              
+              }
+                
               setDataToast([
                 {
                   id: new Date().getTime(),
@@ -121,4 +123,4 @@ function PreviewEditor({ data, setPreviewHandle, setDataToast }) {
   );
 }
 
-export default PreviewEditor;
+export default memo(PreviewEditor);

@@ -177,6 +177,61 @@ function ProductPanel() {
     );
   };
 
+
+  const handleDeleteProduct = (id) => {
+    try {
+      fetch(`http://localhost:3001/api/v1/products/delete`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({id}),
+      })
+        .then((e) => e.json())
+        .then((data) => {
+          if (
+            data.status === ResponseStatus.EXPIRED_TOKEN ||
+            data.status === ResponseStatus.UNAUTHORIZED
+          ) {
+            navigate("/sign/in");
+            return;
+          }
+          getProduct().then(()=>updatePagination());
+
+          setTimeout(() => {
+            setDataToast([
+              {
+                id: new Date().getTime(),
+                success: false,
+                info: "Thành công",
+                content: `Xóa sản phẩm (ID: ${id}) thành công`,
+                show: true,
+              },
+            ]);
+          }, 100);
+
+        })
+        .catch((err) => {
+          setTimeout(() => {
+            setDataToast([
+              {
+                id: new Date().getTime(),
+                success: false,
+                info: "Thất bại",
+                content: "Xóa thất bại",
+                show: true,
+              },
+            ]);
+          }, 100);
+          console.log(err.code);
+        });
+    } catch (error) {
+      console.error(error);
+      navigate("/sign/in");
+    }
+  };
+
   const handleUploadNewProduct = () => {
     try {
       fetch(`http://localhost:3001/api/v1/products/add`, {
@@ -196,6 +251,22 @@ function ProductPanel() {
             navigate("/sign/in");
             return;
           }
+
+          if (data.status === ResponseStatus.UNIQUE_KEY) {
+            setTimeout(() => {
+              setDataToast([
+                {
+                  id: new Date().getTime(),
+                  success: false,
+                  info: "Thất bại",
+                  content: "Đã tồn tại ID này",
+                  show: true,
+                },
+              ]);
+            }, 100);
+            return;
+          }
+
           getProduct();
           updatePagination().then(() => setOffset(pagination.max));
 
@@ -211,19 +282,7 @@ function ProductPanel() {
             ]);
           }, 100);
 
-          if (data.status === ResponseStatus.UNIQUE_KEY) {
-            setTimeout(() => {
-              setDataToast([
-                {
-                  id: new Date().getTime(),
-                  success: false,
-                  info: "Thất bại",
-                  content: "Đã tồn tại ID này",
-                  show: true,
-                },
-              ]);
-            }, 100);
-          }
+          
           setProducts([...data.data]);
         })
         .catch((err) => {
@@ -239,17 +298,17 @@ function ProductPanel() {
     setProducts(
       products.map((product) => {
         if (product.id === id) {
-          product = {
+          return product = {
             ...product,
-            previewURL: value.url,
+            preview: {
+              url: value.url
+            },
             previewId: value.idPreview,
           };
         }
         return product;
       })
     );
-
-    getProduct()
   };
 
   useEffect(() => {
@@ -284,7 +343,7 @@ function ProductPanel() {
       navigate("/sign/in");
     }
   };
-
+  console.log("re-ren")
   return (
     <>
       <Loading loading={loading}/>
@@ -392,10 +451,11 @@ function ProductPanel() {
               </td>
               <td className="AddProduct">
                 <PreviewEditor
-                  data={{ id: v.id, src: v?.preview?.url }}
+                  data={{ id: v.id, src: v.preview?.url }}
                   setDataToast={setDataToast}
                   setPreviewHandle={setPreviewHandle}
                 />
+                <Button onClick={()=>{handleDeleteProduct(v.id)}}>X</Button>
               </td>
             </tr>
           ))}
