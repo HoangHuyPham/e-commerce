@@ -26,31 +26,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadAvatar = exports.upload = void 0;
+exports.uploadPreview = exports.uploadAvatar = void 0;
 const crypto_1 = require("crypto");
 const dotenv = __importStar(require("dotenv"));
 const ResponseStatus_1 = require("../const/ResponseStatus");
 const imageService_1 = __importDefault(require("../services/imageService"));
+const productService_1 = __importDefault(require("../services/productService"));
 const userService_1 = __importDefault(require("../services/userService"));
 dotenv.config();
-const upload = (req, resp) => {
-    var _a, _b, _c, _d, _e, _f;
-    if ((_a = req.file) === null || _a === void 0 ? void 0 : _a.originalname.endsWith(".png")) {
-        (_c = imageService_1.default.upload((0, crypto_1.randomUUID)() + ".png", (_b = req.file) === null || _b === void 0 ? void 0 : _b.buffer)) === null || _c === void 0 ? void 0 : _c.then(e => {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
-        }).catch(err => {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
-        });
-    }
-    else if ((_d = req.file) === null || _d === void 0 ? void 0 : _d.originalname.endsWith(".jpg")) {
-        (_f = imageService_1.default.upload((0, crypto_1.randomUUID)() + ".jpg", (_e = req.file) === null || _e === void 0 ? void 0 : _e.buffer)) === null || _f === void 0 ? void 0 : _f.then(e => {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
-        }).catch(err => {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
-        });
-    }
-};
-exports.upload = upload;
 const uploadAvatar = (req, resp) => {
     var _a, _b, _c, _d;
     const user = req.user;
@@ -81,3 +64,38 @@ const uploadAvatar = (req, resp) => {
     }
 };
 exports.uploadAvatar = uploadAvatar;
+const uploadPreview = (req, resp) => {
+    var _a, _b, _c, _d, _e;
+    const user = req.user;
+    var url = undefined;
+    var id = undefined;
+    var productId = (_a = req.params) === null || _a === void 0 ? void 0 : _a.id;
+    if (!user || !productId) {
+        resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+    }
+    if ((_b = req.file) === null || _b === void 0 ? void 0 : _b.originalname.endsWith(".png")) {
+        imageService_1.default.upload((0, crypto_1.randomUUID)() + ".png", (_c = req.file) === null || _c === void 0 ? void 0 : _c.buffer)
+            .then(e => {
+            url = e.url;
+            id = e.id;
+            productService_1.default.updateProductById(productId, { previewId: e.id });
+        })
+            .then(e => resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: { url, id } }))
+            .catch(err => {
+            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+        });
+    }
+    else if ((_d = req.file) === null || _d === void 0 ? void 0 : _d.originalname.endsWith(".jpg")) {
+        imageService_1.default.upload((0, crypto_1.randomUUID)() + ".png", (_e = req.file) === null || _e === void 0 ? void 0 : _e.buffer)
+            .then(e => {
+            url = e.url;
+            id = e.id;
+            productService_1.default.updateProductById(productId, { previewId: e.id });
+        })
+            .then(e => resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: { url, id } }))
+            .catch(err => {
+            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+        });
+    }
+};
+exports.uploadPreview = uploadPreview;

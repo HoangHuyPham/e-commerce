@@ -11,5 +11,7 @@ export const limitSize = (req:Request, resp:Response, next:any)=>{
         }else{
             next()
         }
+    }else{
+        resp.json({status: ResponseStatus.FAILED, data: {}} as ResponseData)
     }
 }
