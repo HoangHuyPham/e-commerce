@@ -114,6 +114,11 @@ const WatchList = () => {
     navigate(`/watch-detail/${watch.id}`, { state: { watch} });
   };
 
+  const handleBuyNow = (watch) => {
+    localStorage.setItem('buyNowItem', JSON.stringify(watch));
+    navigate('/buynow');
+  };
+
   const showToast = (content, info, success) => {
     setDataToast([
       {
@@ -151,7 +156,7 @@ const WatchList = () => {
                     >
                       <FontAwesomeIcon icon={faHeart} />
                     </Button>
-                    <Button className="BuyBtn" variant="warning">Mua ngay</Button>
+                    <Button className="BuyBtn" variant="warning"onClick={() => handleBuyNow(watch)}>Mua ngay</Button>
                   </Card.Footer>
                 </Card>
             );

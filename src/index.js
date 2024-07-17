@@ -19,8 +19,10 @@ import SignUp from "./views/SignUp";
 import WatchDetail from "./views/WatchDetail";
 import Cart from "./views/Cart";
 import WatchList from "./components/WatchList";
-import CheckoutPage from "./views/CheckOutPage";
+import CheckOutList from "./views/CheckOutList";
 import OrderSuccess from "./views/OrderSuccsess";
+import CheckOutItem from "./views/CheckOutItem";
+import BuyNow from "./components/BuyNow";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -31,9 +33,10 @@ const router = createBrowserRouter(
         <Route path="home" element={<Home />} />
       {/*  <Route path="search" element={<SearchPage />}>*/}
       {/*</Route>*/}
-          <Route path="/cart" element={<Cart/>}/>
-          <Route path="/thanhtoan" component={<CheckoutPage/>} />
-          <Route path="/order-success" component={<OrderSuccess/>} />
+          <Route path="cart" element={<Cart/>}/>
+          <Route path="buynow" element={<BuyNow/>} />
+          <Route path="cart/thanhtoan" element={<CheckOutList/>} />
+          <Route path="order-success" element={<OrderSuccess/>} />
       </Route>
 
       <Route path="/dashboard" element={<DashBoard />}>

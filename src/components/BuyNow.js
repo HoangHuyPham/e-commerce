@@ -1,48 +1,51 @@
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import { Button } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
-import TopBar from "../components/TopBar";
+import { useNavigate } from "react-router-dom";
 import MyToast from "../components/MyToast";
-import Footer from "../components/Footer";
 import "../assets/styles/CheckoutPage.scss"
 
-const CheckoutPage = () => {
+const BuyNow = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const items = location.state?.items || [];
+    const [item, setItem] = useState({});
     const [dataToast, setDataToast] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
 
     useEffect(() => {
-        calculateTotalAmount();
-    }, [items]);
+        const savedItems = JSON.parse(localStorage.getItem("buyNowItem")) || [];
+        setItem(savedItems);
+        calculateTotalAmount(savedItems);
+    }, []);
 
-    const calculateTotalAmount = () => {
-        let total = 0;
-        items.forEach((item) => {
-            total += item.price;
-        });
-        setTotalAmount(total);
+    const calculateTotalAmount = (items) => {
+        setTotalAmount(item.price);
     };
 
     const handleConfirmOrder = () => {
-        setTimeout(() => {
+        try {
+            const orderData = {
+                item: item,
+                totalAmount: totalAmount,
+                date: new Date().toISOString(),
+            };
+            const savedOrders = JSON.parse(localStorage.getItem("orders")) || [];
+            savedOrders.push(orderData);
+            localStorage.setItem("orders", JSON.stringify(savedOrders));
+
             showToast("Đơn hàng của bạn đã được xác nhận!", "Thành công", true);
             clearCart();
-        }, 1000);
+        } catch (error) {
+            showToast("Đã có lỗi xảy ra khi xác nhận đơn hàng.", "Lỗi", false);
+            console.error("Error confirming order:", error);
+        }
     };
 
     const clearCart = () => {
-        const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
-        const updatedCart = cartData.filter(
-            (cartItem) => !items.some((item) => item.id === cartItem.id)
-        );
-
-        localStorage.setItem("cartData", JSON.stringify(updatedCart));
+        localStorage.removeItem("buyNowItem");
         window.dispatchEvent(new Event("cartUpdated"));
         navigate("/order-success");
     };
+
 
     const showToast = (content, info, success) => {
         setDataToast([
@@ -58,36 +61,34 @@ const CheckoutPage = () => {
 
     return (
         <>
-            <TopBar />
             <MyToast data={dataToast} />
             <div className="CheckoutPage">
                 <span className="Title">Xác nhận đơn hàng</span>
                 <span className="TotalAmount" style={{ marginLeft: "auto" }}>
-                    Tổng tiền: {totalAmount.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
+                    Tổng tiền: {totalAmount?.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
                 </span>
                 <div className="Content">
-                    {items.map((item, i) => (
-                        <Card key={i}>
-                            <Card.Img variant="top" src={item.link} className="img-fluid" />
+
+                        <Card>
+                            <Card.Img variant="top" src={item.url} className="img-fluid" />
                             <Card.Body>
                                 <Card.Title>{item.name}</Card.Title>
                                 <Card.Text>
-                                    {item.price.toLocaleString("vi-VN", {
+                                    {item.price?.toLocaleString("vi-VN", {
                                         style: "currency",
                                         currency: "VND",
                                     })}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
-                    ))}
+
                 </div>
-                <Button className="mt-3" onClick={handleConfirmOrder}>
+                <Button onClick={handleConfirmOrder}>
                     Xác nhận thanh toán
                 </Button>
             </div>
-            <Footer />
         </>
     );
 };
 
-export default CheckoutPage;
+export default BuyNow;

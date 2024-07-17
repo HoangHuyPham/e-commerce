@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faHeart, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import MyToast from "../components/MyToast";
-import "../assets/styles/Cart.scss";
+import "../assets/styles/Cart.scss"
 
 const Cart = () => {
     const [cartData, setCartData] = useState(JSON.parse(localStorage.getItem("cartData")) || []);
@@ -20,24 +18,23 @@ const Cart = () => {
 
     const handleRemoveFromCart = (watch) => {
         const indexToRemove = cartData.findIndex((item) => item.id === watch.id);
-        if (indexToRemove === -1) {
-            return;
+
+        if (indexToRemove !== -1) {
+            const updatedCart = [...cartData];
+            updatedCart.splice(indexToRemove, 1); // Remove 1 element from indexToRemove
+            setCartData(updatedCart);
+            localStorage.setItem("cartData", JSON.stringify(updatedCart));
+            showToast(`${watch.name} đã bị xóa khỏi giỏ hàng.`, "Thành công", true);
+            window.dispatchEvent(new Event("cartUpdated"));
         }
-        const updatedCart = [...cartData];
-        updatedCart.splice(indexToRemove, 1);
-        const newTotal = totalAmount - watch.price;
-        setCartData(updatedCart);
-        setTotalAmount(newTotal);
-        localStorage.setItem("cartData", JSON.stringify(updatedCart));
-        showToast(`${watch.name} đã bị xóa khỏi giỏ hàng.`, "Thành công", true);
-        window.dispatchEvent(new Event("cartUpdated"));
     };
 
-    const handleCheckout = () => {
-        if (cartData.length === 0) {
+    const handleCheckout = (items) => {
+        if (items.length === 0) {
             setShowAlert(true);
         } else {
-            navigate("/thanhtoan", { state: { cartData } });
+            localStorage.setItem("checkoutItems", JSON.stringify(items));
+            navigate("thanhtoan");
         }
     };
 
@@ -73,7 +70,7 @@ const Cart = () => {
                     {cartData.map((item, i) => (
                         <Card key={i}>
                             <Link to={`/watch/${item.id}`}>
-                                <Card.Img variant="top" src={item.link} className="img-fluid" />
+                                <Card.Img variant="top" src={item.url} className="img-fluid" />
                             </Link>
                             <Card.Body>
                                 <Card.Title>{item.name}</Card.Title>
@@ -86,24 +83,24 @@ const Cart = () => {
                             </Card.Body>
                             <Card.Footer>
                                 <Button variant="danger" onClick={() => handleRemoveFromCart(item)}>
-                                    <FontAwesomeIcon icon={faMinus} />
+                                    Xóa
                                 </Button>
-                                <Button className="BuyBtn" variant="warning" onClick={handleCheckout}>
+                                <Button className="BuyBtn" variant="warning" onClick={() => handleCheckout([item])}>
                                     Mua ngay
                                 </Button>
                             </Card.Footer>
                         </Card>
                     ))}
                 </div>
+                {showAlert && (
+                    <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
+                        Bạn cần ít nhất một sản phẩm để thanh toán!
+                    </Alert>
+                )}
+                <div className={"bottom"}><Button onClick={() => handleCheckout(cartData)}>
+                    Thanh toán
+                </Button></div>
             </div>
-            {showAlert && (
-                <Alert variant="danger" onClose={() => setShowAlert(false)} dismissible>
-                    Bạn cần ít nhất một sản phẩm để thanh toán!
-                </Alert>
-            )}
-            <Button className="mt-3"style={{ marginLeft: "auto" }} onClick={handleCheckout}>
-                Thanh toán
-            </Button>
         </>
     );
 };

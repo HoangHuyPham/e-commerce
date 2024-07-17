@@ -56,6 +56,12 @@ const WatchDetail = () => {
         addToCart(watch, user, favoriteData, setFavoriteData, showToast, navigate);
     };
 
+    const handleBuyNow = () => {
+        localStorage.setItem('checkoutItem', JSON.stringify(watch));
+        navigate('buynow');
+        //buynow();
+    };
+
 
 
     return (
@@ -84,7 +90,7 @@ const WatchDetail = () => {
                     <Button variant="danger" onClick={() => handleAddToFavorites(watch)}>
                         <FontAwesomeIcon icon={faHeart}/>
                     </Button>
-                    <Button className="BuyBtn" variant="warning">
+                    <Button className="BuyBtn" variant="warning" onClick={handleBuyNow}>
                         Mua ngay
                     </Button>
                 </div>
