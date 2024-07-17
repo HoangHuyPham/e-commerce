@@ -67,25 +67,25 @@ const Cart = () => {
                     Tổng tiền: {totalAmount.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}
                 </span>
                 <div className="Content">
-                    {cartData.map((item, i) => (
+                    {cartData.map((watch, i) => (
                         <Card key={i}>
-                            <Link to={`/watch/${item.id}`}>
-                                <Card.Img variant="top" src={item.url} className="img-fluid" />
-                            </Link>
+
+                            <Card.Img onClick={()=>navigate(`/watch-detail/${watch.id}`, { state: { watch } })} variant="top" src={watch.preview?.url} className="img-fluid" />
+
                             <Card.Body>
-                                <Card.Title>{item.name}</Card.Title>
+                                <Card.Title>{watch.name}</Card.Title>
                                 <Card.Text>
-                                    {item.price.toLocaleString("vi-VN", {
+                                    {watch.price.toLocaleString("vi-VN", {
                                         style: "currency",
                                         currency: "VND",
                                     })}
                                 </Card.Text>
                             </Card.Body>
                             <Card.Footer>
-                                <Button variant="danger" onClick={() => handleRemoveFromCart(item)}>
+                                <Button variant="danger" onClick={() => handleRemoveFromCart(watch)}>
                                     Xóa
                                 </Button>
-                                <Button className="BuyBtn" variant="warning" onClick={() => handleCheckout([item])}>
+                                <Button className="BuyBtn" variant="warning" onClick={() => handleCheckout([watch])}>
                                     Mua ngay
                                 </Button>
                             </Card.Footer>

@@ -195,14 +195,14 @@ const WatchList = () => {
                       <Card.Text>{watch.price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                      <Button variant="primary"><FontAwesomeIcon icon={faShoppingCart} /></Button>
+                      <Button onClick={()=>addToCart(watch)} variant="primary"><FontAwesomeIcon icon={faShoppingCart} /></Button>
                       <Button
                           variant="danger"
                           onClick={() => addToFavorites(watch)}
                       >
                         <FontAwesomeIcon icon={faHeart} />
                       </Button>
-                      <Button className="BuyBtn" variant="warning">Mua ngay</Button>
+                      <Button onClick={()=>handleBuyNow(watch)} className="BuyBtn" variant="warning">Mua ngay</Button>
                     </Card.Footer>
                   </Card>
               ))

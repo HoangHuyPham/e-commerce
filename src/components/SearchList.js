@@ -63,6 +63,23 @@ function SearchList() {
     filterAlphabet(Number(alphabet))
   };
 
+  const handleBuyNow = (watch) => {
+    localStorage.setItem('buyNowItem', JSON.stringify(watch));
+    navigate('/buynow');
+  };
+
+  const addToCart = (watch) => {
+    if (user == null) {
+      navigate("/sign/in");
+    } else {
+      const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+      const updatedCart = [...cartData, watch];
+      localStorage.setItem("cartData", JSON.stringify(updatedCart));
+      showToast(`${watch.name} đã được thêm vào giỏ hàng!`, "Thành công", true);
+      window.dispatchEvent(new Event("cartUpdated"));
+    }
+  };
+
   const filterCategory = (type) => {
     if (!type || isNaN(type)) return
     
@@ -208,30 +225,6 @@ function SearchList() {
     }
   };
 
-  const getPaginationItem = () => {
-    let items = [];
-    let min =
-      currentOffset - 1 < pagination.min ? currentOffset : currentOffset - 1;
-    let max =
-      currentOffset + 1 > pagination.max ? currentOffset : currentOffset + 1;
-
-    for (let number = min + 1; number <= max + 1; number++) {
-      items.push(
-        <Pagination.Item
-          key={number}
-          onClick={() => {
-            setOffset(number - 1);
-          }}
-          active={number === currentOffset + 1}
-        >
-          {number}
-        </Pagination.Item>
-      );
-    }
-
-    return items;
-  };
-
 
   const showToast = (content, info, success) => {
     setDataToast([
@@ -320,7 +313,7 @@ function SearchList() {
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <Button variant="primary">
+                    <Button onClick={()=> addToCart(watch)} variant="primary">
                       <FontAwesomeIcon icon={faPlus} />
                     </Button>
                     <Button
@@ -329,7 +322,7 @@ function SearchList() {
                     >
                       <FontAwesomeIcon icon={faHeart} />
                     </Button>
-                    <Button className="BuyBtn" variant="warning">
+                    <Button onClick={()=>handleBuyNow(watch)} className="BuyBtn" variant="warning">
                       Mua ngay
                     </Button>
                   </Card.Footer>

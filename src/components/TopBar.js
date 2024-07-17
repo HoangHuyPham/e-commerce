@@ -118,8 +118,8 @@ function TopBar() {
       </section>
 
       <section className="Misc">
-        <FontAwesomeIcon className="Cart" icon={faCartShopping} />
-        <span className="CartNum">0</span>
+        <FontAwesomeIcon onClick={handleAddToCart} className="Cart" icon={faCartShopping} />
+        <span className="CartNum">{cartCount}</span>
         <FontAwesomeIcon
           className="Fav"
           icon={faHeart}

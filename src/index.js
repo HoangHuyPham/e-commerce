@@ -24,7 +24,6 @@ import SignUp from "./views/SignUp";
 import WatchDetail from "./views/WatchDetail";
 import WatchList from "./components/WatchList";
 import Cart from "./views/Cart";
-import WatchList from "./components/WatchList";
 import CheckOutList from "./views/CheckOutList";
 import OrderSuccess from "./views/OrderSuccsess";
 import CheckOutItem from "./views/CheckOutItem";
