@@ -17,6 +17,7 @@ import SignIn from "./views/SignIn";
 import SignInOut from "./views/SignInUp";
 import SignUp from "./views/SignUp";
 import WatchDetail from "./views/WatchDetail";
+import Cart from "./views/Cart";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
 
     <Route>
         <Route path="/watch/:id" element={<WatchDetail />} />
+        <Route path={"/cart"} element={<Cart/>}/>
         <Route path="/favorites" element={<FavoriteWatches />} />
     </Route>
 
