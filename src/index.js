@@ -22,6 +22,7 @@ import SignIn from "./views/SignIn";
 import SignInOut from "./views/SignInUp";
 import SignUp from "./views/SignUp";
 import WatchDetail from "./views/WatchDetail";
+import WatchList from "./components/WatchList";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -30,7 +31,10 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<Home />} />
-        <Route path="search" element={<SearchPage />}></Route>
+        <Route path="search" element={<SearchPage />} />
+        <Route path="watch-list" element={<WatchList />} />
+        <Route path="watch-detail/:id" element={<WatchDetail />} />
+        <Route path="favorites" element={<FavoriteWatches />} />
       </Route>
 
       <Route path="/dashboard" element={<DashBoard />}>
@@ -50,21 +54,12 @@ const router = createBrowserRouter(
         <Route path="up" element={<SignUp />} />
       </Route>
 
-      <Route>
-        <Route path="/watch/:id" element={<WatchDetail />} />
-        <Route path="/favorites" element={<FavoriteWatches />} />
-      </Route>
-
-    <Route path="/" element={<App />}>
-        <Route path="watch-list" element={<WatchList />} />
-        <Route path="/favorites" element={<FavoriteWatches />} />
-        <Route path="watch-detail/:id" element={<WatchDetail />} />
-    </Route>
-
+      <Route path="/watch/:id" element={<WatchDetail />} />
+      <Route path="/favorites" element={<FavoriteWatches />} />
 
       <Route path="*" element={<NotFound />} />
     </>
-  )
+    )
 );
 
 root.render(

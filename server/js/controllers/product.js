@@ -37,7 +37,7 @@ const productGetPagination = (req, resp) => {
     let category = (_a = req.query) === null || _a === void 0 ? void 0 : _a.category;
     let keyword = (_b = req.query) === null || _b === void 0 ? void 0 : _b.keyword;
     if (category && keyword) {
-        productService_1.default.getPagination(keyword, Number(category)).then((e) => {
+        productService_1.default.getPagination(keyword).then((e) => {
             if (e) {
                 resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
             }
@@ -137,10 +137,9 @@ const deleteProductPost = (req, resp) => {
 };
 exports.deleteProductPost = deleteProductPost;
 const productGetSearch = (req, resp) => {
-    var _a, _b;
+    var _a;
     let keyword = (_a = req.query) === null || _a === void 0 ? void 0 : _a.keyword;
-    let category = (_b = req.query) === null || _b === void 0 ? void 0 : _b.category;
-    productService_1.default.getAllProductsByOp(keyword, Number(category)).then(e => {
+    productService_1.default.getAllProductsByOp(keyword).then(e => {
         resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
     }).catch(err => {
         console.log(err);

@@ -13,7 +13,7 @@ export const productGetPagination = (req: Request, resp: Response): void => {
     let keyword = req.query?.keyword
 
     if (category && keyword){
-        productService.getPagination(keyword as string, Number(category)).then((e) => {
+        productService.getPagination(keyword as string).then((e) => {
             if (e) {
                 resp.json({ status: ResponseStatus.SUCCESS, data: e } as ResponseData)
             } else {
@@ -119,10 +119,8 @@ export const deleteProductPost = (req: Request, resp: Response): void => {
 
 export const productGetSearch = (req: Request, resp: Response): void => {
     let keyword = req.query?.keyword
-    let category = req.query?.category
 
-
-    productService.getAllProductsByOp(keyword as string, Number(category)).then(e => {
+    productService.getAllProductsByOp(keyword as string).then(e => {
         resp.json({ status: ResponseStatus.SUCCESS, data: e } as ResponseData)
     }).catch(err => {
         console.log(err)

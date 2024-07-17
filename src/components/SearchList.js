@@ -14,8 +14,13 @@ import "../assets/styles/App.scss";
 import { ResponseStatus } from "../ResponseStatus";
 import { AppContext } from "../stores/contexts/AppContext";
 import Loading from "./Loading";
+import MyToast from "./MyToast";
 
 function SearchList() {
+  const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
+  const [user, setUser] = useState(null)
+  const [dataToast, setDataToast] = useState([]);
+  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
   const [data, setData] = useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [currentOffset, setOffset] = useState(-1);
@@ -31,6 +36,16 @@ function SearchList() {
   const [followPrice, setFollowPrice] = useState();
   const [priceFromTo, setPriceFromTo] = useState();
   const [alphabet, setAlphabet] = useState();
+  useEffect(() => {
+    let payload = accessToken?.split(".")[1]
+    if (!payload)
+      return
+    let decodedPayload = JSON.parse(atob(payload))
+
+    setUser({
+      ...decodedPayload
+    })
+  }, []);
 
   useEffect(() => {
     getProduct();
@@ -177,6 +192,22 @@ function SearchList() {
     }
   };
 
+  const addToFavorites = (watch) => {
+    if (user == null) {
+      navigate("/sign/in");
+    } else {
+      if (!favoriteData.some((item) => item.id === watch.id)) {
+        const updatedFavorites = [...favoriteData, watch];
+        setFavoriteData(updatedFavorites);
+        localStorage.setItem("favoriteData", JSON.stringify(updatedFavorites));
+        showToast(`${watch.name} đã được thêm vào danh sách yêu thích!`, "Thành công", true);
+        window.dispatchEvent(new Event('favoritesUpdated'));
+      } else {
+        showToast(`${watch.name} đã có trong danh sách yêu thích!`, "Thông tin", false);
+      }
+    }
+  };
+
   const getPaginationItem = () => {
     let items = [];
     let min =
@@ -201,8 +232,22 @@ function SearchList() {
     return items;
   };
 
+
+  const showToast = (content, info, success) => {
+    setDataToast([
+      {
+        id: new Date().getTime(),
+        success: success,
+        show: true,
+        info: info,
+        content: content,
+      }
+    ]);
+  };
+
   return (
     <div className="SearchPage">
+      <MyToast data={dataToast}/>
       <Loading loading={loading} />
       <section className="Filter">
         <FormGroup className="Item">
@@ -258,7 +303,7 @@ function SearchList() {
 
       <section className="SearchList">
         <div className="Content">
-          {(products?.length > 0 &&
+          {
             products.map((watch, i) => {
               return (
                 <Card key={i}>
@@ -280,7 +325,7 @@ function SearchList() {
                     </Button>
                     <Button
                       variant="danger"
-                      onClick={() => this.addToFavorites(watch)}
+                      onClick={() => addToFavorites(watch)}
                     >
                       <FontAwesomeIcon icon={faHeart} />
                     </Button>
@@ -290,13 +335,14 @@ function SearchList() {
                   </Card.Footer>
                 </Card>
               );
-            })) || (
-            <h1>
+            })
+            
+          }
+        </div>
+        {(!(products?.length > 0)) && <h1>
               Không có sản phẩm nào
               <FontAwesomeIcon icon={faSadCry} />
-            </h1>
-          )}
-        </div>
+            </h1>}
       </section>
     </div>
   );
