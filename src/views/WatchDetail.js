@@ -53,12 +53,17 @@ const WatchDetail = () => {
     };
 
     const handleAddToCart = () => {
-        addToCart(watch, user, favoriteData, setFavoriteData, showToast, navigate);
+        const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+        const updatedCart = [...cartData, watch];
+        localStorage.setItem("cartData", JSON.stringify(updatedCart));
+        showToast(`${watch.name} đã được thêm vào giỏ hàng!`, "Thành công", true);
+        window.dispatchEvent(new Event("cartUpdated"));
     };
 
     const handleBuyNow = () => {
+        localStorage.removeItem('checkoutItem')
         localStorage.setItem('checkoutItem', JSON.stringify(watch));
-        navigate('buynow');
+        navigate('/buynow');
         //buynow();
     };
 
