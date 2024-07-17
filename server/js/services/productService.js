@@ -32,6 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = require("@sequelize/core");
 const dotenv = __importStar(require("dotenv"));
 const Image_1 = require("../models/Image");
 const Watch_1 = require("../models/Watch");
@@ -39,18 +40,27 @@ dotenv.config();
 var productService;
 (function (productService) {
     const LIMIT = 10;
-    productService.getPagination = () => __awaiter(this, void 0, void 0, function* () {
-        let min = -1;
-        let max = -1;
-        yield Watch_1.Watch.findAll().then(e => {
-            min = 0;
-            max = Math.ceil(e.length / LIMIT) - 1;
-        });
-        return new Promise(resolve => resolve({ min, max, size: LIMIT }));
-    });
     productService.deleteProductById = (id) => {
         return Watch_1.Watch.destroy({
             where: { id }
+        });
+    };
+    productService.getAllProductsByOp = (keyword) => {
+        if (keyword) {
+            return Watch_1.Watch.findAll({
+                where: {
+                    name: { [core_1.Op.like]: `%${keyword}%` }
+                }, include: [
+                    {
+                        model: Image_1.Image,
+                        as: 'preview',
+                        attributes: ['url'],
+                    },
+                ]
+            });
+        }
+        return Watch_1.Watch.findAll({
+            where: {}
         });
     };
     productService.getAllProducts = (offset = 0, limit = LIMIT) => {
@@ -77,5 +87,22 @@ var productService;
     productService.addProduct = (watch) => {
         return Watch_1.Watch.create(watch);
     };
+    productService.getPagination = (keyword) => __awaiter(this, void 0, void 0, function* () {
+        let min = -1;
+        let max = -1;
+        if (keyword) {
+            yield productService.getAllProductsByOp(keyword).then(e => {
+                min = 0;
+                max = Math.ceil(e.length / LIMIT) - 1;
+            });
+        }
+        else {
+            yield Watch_1.Watch.findAll().then(e => {
+                min = 0;
+                max = Math.ceil(e.length / LIMIT) - 1;
+            });
+        }
+        return new Promise(resolve => resolve({ min, max, size: LIMIT }));
+    });
 })(productService || (productService = {}));
 exports.default = productService;

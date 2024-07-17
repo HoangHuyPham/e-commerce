@@ -26,27 +26,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProductPost = exports.updateProductPost = exports.addProductPost = exports.productGet = exports.productGetPagination = void 0;
+exports.productGetSearch = exports.deleteProductPost = exports.updateProductPost = exports.addProductPost = exports.productGet = exports.productGetPagination = void 0;
 const core_1 = require("@sequelize/core");
 const dotenv = __importStar(require("dotenv"));
 const ResponseStatus_1 = require("../const/ResponseStatus");
 const productService_1 = __importDefault(require("../services/productService"));
 dotenv.config();
 const productGetPagination = (req, resp) => {
-    productService_1.default.getPagination().then((e) => {
-        if (e) {
-            resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
-        }
-        else {
-            // Failed
+    var _a, _b;
+    let category = (_a = req.query) === null || _a === void 0 ? void 0 : _a.category;
+    let keyword = (_b = req.query) === null || _b === void 0 ? void 0 : _b.keyword;
+    if (category && keyword) {
+        productService_1.default.getPagination(keyword, Number(category)).then((e) => {
+            if (e) {
+                resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
+            }
+            else {
+                // Failed
+                resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+            }
+            return;
+        }).catch(err => {
+            // Error
+            console.log(err);
             resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
-        }
-        return;
-    }).catch(err => {
-        // Error
-        console.log(err);
-        resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
-    });
+        });
+    }
+    else {
+        productService_1.default.getPagination().then((e) => {
+            if (e) {
+                resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
+            }
+            else {
+                // Failed
+                resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+            }
+            return;
+        }).catch(err => {
+            // Error
+            console.log(err);
+            resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: {} });
+        });
+    }
 };
 exports.productGetPagination = productGetPagination;
 const productGet = (req, resp) => {
@@ -115,3 +136,15 @@ const deleteProductPost = (req, resp) => {
     });
 };
 exports.deleteProductPost = deleteProductPost;
+const productGetSearch = (req, resp) => {
+    var _a, _b;
+    let keyword = (_a = req.query) === null || _a === void 0 ? void 0 : _a.keyword;
+    let category = (_b = req.query) === null || _b === void 0 ? void 0 : _b.category;
+    productService_1.default.getAllProductsByOp(keyword, Number(category)).then(e => {
+        resp.json({ status: ResponseStatus_1.ResponseStatus.SUCCESS, data: e });
+    }).catch(err => {
+        console.log(err);
+        resp.json({ status: ResponseStatus_1.ResponseStatus.FAILED, data: err });
+    });
+};
+exports.productGetSearch = productGetSearch;
