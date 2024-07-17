@@ -5,6 +5,7 @@ import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 import MyToast from "../components/MyToast";
 import { useNavigate } from "react-router-dom";
+import {addToCart} from "./addToCart";
 
 const WatchList = () => {
   const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
@@ -70,9 +71,17 @@ const WatchList = () => {
     }
   ]);
 
-  const handleAddToCart = (params) => {
-    // add-to-cart logic here
-  }
+  const addToCart = (watch) => {
+    if (user == null) {
+      navigate("/sign/in");
+    } else {
+      const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+      const updatedCart = [...cartData, watch];
+      localStorage.setItem("cartData", JSON.stringify(updatedCart));
+      showToast(`${watch.name} đã được thêm vào giỏ hàng!`, "Thành công", true);
+      window.dispatchEvent(new Event("cartUpdated"));
+    }
+  };
 
   useEffect(()=>{
     let payload = accessToken?.split(".")[1]
@@ -133,7 +142,10 @@ const WatchList = () => {
                     <Card.Text>{watch.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Card.Text>
                   </Card.Body>
                   <Card.Footer>
-                    <Button variant="primary"><FontAwesomeIcon icon={faPlus} /></Button>
+                    <Button variant="primary"
+                        onClick={() => addToCart(watch)}
+                    >
+                      <FontAwesomeIcon icon={faPlus} /></Button>
                     <Button
                         variant="danger"
                         onClick={() => addToFavorites(watch)}

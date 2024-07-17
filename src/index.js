@@ -12,12 +12,15 @@ import Home from "./views/Home";
 import Info from "./views/Info";
 import NotFound from "./views/NotFound";
 import ProductPanel from "./views/ProductPanel";
-import SearchPage from "./views/SearchPage";
+//import SearchPage from "./views/SearchPage";
 import SignIn from "./views/SignIn";
 import SignInOut from "./views/SignInUp";
 import SignUp from "./views/SignUp";
 import WatchDetail from "./views/WatchDetail";
 import Cart from "./views/Cart";
+import WatchList from "./components/WatchList";
+import CheckoutPage from "./views/CheckOutPage";
+import OrderSuccess from "./views/OrderSuccsess";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const router = createBrowserRouter(
@@ -26,8 +29,8 @@ const router = createBrowserRouter(
       <Route path="/" element={<App />}>
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<Home />} />
-        <Route path="search" element={<SearchPage />}>
-      </Route>
+      {/*  <Route path="search" element={<SearchPage />}>*/}
+      {/*</Route>*/}
       </Route>
 
       <Route path="/dashboard" element={<DashBoard />}>
@@ -51,8 +54,10 @@ const router = createBrowserRouter(
 
     <Route>
         <Route path="/watch/:id" element={<WatchDetail />} />
-        <Route path={"/cart"} element={<Cart/>}/>
+        <Route path="/cart" element={<Cart/>}/>
         <Route path="/favorites" element={<FavoriteWatches />} />
+        <Route path="/thanhtoan" component={<CheckoutPage/>} />
+        <Route path="/order-success" component={<OrderSuccess/>} />
     </Route>
 
     <Route path="/" element={<App />}>
