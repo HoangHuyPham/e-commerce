@@ -31,6 +31,9 @@ const router = createBrowserRouter(
         <Route path="home" element={<Home />} />
       {/*  <Route path="search" element={<SearchPage />}>*/}
       {/*</Route>*/}
+          <Route path="/cart" element={<Cart/>}/>
+          <Route path="/thanhtoan" component={<CheckoutPage/>} />
+          <Route path="/order-success" component={<OrderSuccess/>} />
       </Route>
 
       <Route path="/dashboard" element={<DashBoard />}>
@@ -54,10 +57,7 @@ const router = createBrowserRouter(
 
     <Route>
         <Route path="/watch/:id" element={<WatchDetail />} />
-        <Route path="/cart" element={<Cart/>}/>
         <Route path="/favorites" element={<FavoriteWatches />} />
-        <Route path="/thanhtoan" component={<CheckoutPage/>} />
-        <Route path="/order-success" component={<OrderSuccess/>} />
     </Route>
 
     <Route path="/" element={<App />}>

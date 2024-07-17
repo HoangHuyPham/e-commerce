@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faHeart, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import TopBar from "../components/TopBar";
 import MyToast from "../components/MyToast";
-import Footer from "../components/Footer";
+import "../assets/styles/Cart.scss";
 
 const Cart = () => {
     const [cartData, setCartData] = useState(JSON.parse(localStorage.getItem("cartData")) || []);
@@ -20,11 +19,13 @@ const Cart = () => {
     }, [cartData]);
 
     const handleRemoveFromCart = (watch) => {
-        const updatedCart = cartData.filter((item) => item.id !== watch.id);
-        const removedItem = cartData.find((item) => item.id === watch.id);
-        const priceToRemove = removedItem ? removedItem.price : 0;
-        const newTotal = totalAmount - priceToRemove;
-
+        const indexToRemove = cartData.findIndex((item) => item.id === watch.id);
+        if (indexToRemove === -1) {
+            return;
+        }
+        const updatedCart = [...cartData];
+        updatedCart.splice(indexToRemove, 1);
+        const newTotal = totalAmount - watch.price;
         setCartData(updatedCart);
         setTotalAmount(newTotal);
         localStorage.setItem("cartData", JSON.stringify(updatedCart));
@@ -32,12 +33,11 @@ const Cart = () => {
         window.dispatchEvent(new Event("cartUpdated"));
     };
 
-    const handleCheckout = (items) => {
-        if (items.length === 0) {
+    const handleCheckout = () => {
+        if (cartData.length === 0) {
             setShowAlert(true);
         } else {
-            console.log("Navigating to /thanhtoan with items:", items); // Log to check data
-            navigate("/thanhtoan", { state: { items } });
+            navigate("/thanhtoan", { state: { cartData } });
         }
     };
 
@@ -63,7 +63,6 @@ const Cart = () => {
 
     return (
         <>
-            <TopBar />
             <MyToast data={dataToast} />
             <div className="Cart">
                 <span className="Title">Giỏ hàng của bạn</span>
@@ -89,7 +88,7 @@ const Cart = () => {
                                 <Button variant="danger" onClick={() => handleRemoveFromCart(item)}>
                                     <FontAwesomeIcon icon={faMinus} />
                                 </Button>
-                                <Button className="BuyBtn" variant="warning" onClick={() => handleCheckout([item])}>
+                                <Button className="BuyBtn" variant="warning" onClick={handleCheckout}>
                                     Mua ngay
                                 </Button>
                             </Card.Footer>
@@ -102,10 +101,9 @@ const Cart = () => {
                     Bạn cần ít nhất một sản phẩm để thanh toán!
                 </Alert>
             )}
-            <Button className="mt-3" onClick={() => handleCheckout(cartData)}>
+            <Button className="mt-3"style={{ marginLeft: "auto" }} onClick={handleCheckout}>
                 Thanh toán
             </Button>
-            <Footer />
         </>
     );
 };

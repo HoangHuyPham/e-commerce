@@ -1,4 +1,4 @@
-.Cart {
+.CheckoutPage {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
@@ -54,41 +54,18 @@
         margin-bottom: 10px;
       }
     }
+  }
 
-    .CardFooter {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
-      background-color: #f8f9fa;
+  .mt-3 {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    align-items: center;
+  }
 
-      .Button {
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-
-        &:hover {
-          opacity: 0.8;
-        }
-      }
-
-      .BuyBtn {
-        background-color: #ffc107;
-        color: white;
-
-        &:hover {
-          background-color: #ffca2b;
-        }
-      }
-
-      .RemoveBtn {
-        background-color: #dc3545;
-        color: white;
-
-        &:hover {
-          background-color: #c82333;
-        }
-      }
-    }
+  .Button {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 200px; // Để nút không quá rộng
   }
 }

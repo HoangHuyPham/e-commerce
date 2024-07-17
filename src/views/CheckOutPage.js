@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import MyToast from "../components/MyToast";
 import Footer from "../components/Footer";
+import "../assets/styles/CheckoutPage.scss"
 
 const CheckoutPage = () => {
     const navigate = useNavigate();

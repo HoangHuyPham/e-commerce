@@ -5,7 +5,6 @@ import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "react-bootstrap";
 import MyToast from "../components/MyToast";
 import { useNavigate } from "react-router-dom";
-import {addToCart} from "./addToCart";
 
 const WatchList = () => {
   const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
