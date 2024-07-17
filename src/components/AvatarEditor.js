@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import "../assets/styles/Editor.scss"
 import userDefault from "../assets/images/userDefault.png"
+import { Spinner } from "react-bootstrap";
 
 function AvatarEditor({ setDataToast, updateInfo, userInfo }) {
-  
+  const [loading, setLoading] = useState(false)
 
   const handleImgSelect = async (e) => {
+    setLoading(true)
+
     let fileSelect = e.target.files[0];
     if (fileSelect) {
       if (fileSelect.type !== "image/png" && fileSelect.type !== "image/jpeg") {
+        setLoading(false)
         setDataToast([
           {
             id: new Date().getTime(),
@@ -32,6 +36,7 @@ function AvatarEditor({ setDataToast, updateInfo, userInfo }) {
           updateInfo()
 
           setTimeout(() => {
+            
             setDataToast([
               {
                 id: new Date().getTime(),
@@ -43,7 +48,20 @@ function AvatarEditor({ setDataToast, updateInfo, userInfo }) {
             ]);
           }, (100));
         }
-      );
+      ).catch(()=>{
+        setTimeout(() => {
+            
+          setDataToast([
+            {
+              id: new Date().getTime(),
+              success: false,
+              info: "Thất bại",
+              content: "Cập nhật ảnh mới thất bại",
+              show: true,
+            },
+          ]);
+        }, (100));
+      }).finally(()=>setLoading(false));
 
 
     }
@@ -61,10 +79,15 @@ function AvatarEditor({ setDataToast, updateInfo, userInfo }) {
         alt="avatar"
         loading="lazy"
       ></img>
+      
       <form className="avatar_sender" encType="multipart/form-data">
         <input className="input_sender" name="image" onChange={handleImgSelect} type="file" accept=".png, .jpg" />
       </form>
+      {!!loading && <div className="waiting"><Spinner variant="light"/></div>}
     </section>
+
+    
+    
   );
 }
 

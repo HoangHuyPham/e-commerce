@@ -1,35 +1,41 @@
 import {
   faCartShopping,
-  faHeart, faMagnifyingGlass
+  faHeart,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
+import { AppContext } from "../stores/contexts/AppContext";
 
 function TopBar() {
   const navigate = useNavigate();
-  const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
-  const [user, setUser] = useState(null)
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+  const [user, setUser] = useState(null);
   const [favCount, setFavCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
 
+  const [data, setData] = useContext(AppContext);
 
-  useEffect(()=>{
-    let payload = accessToken?.split(".")[1]
-    if (!payload)
-      return
-    let decodedPayload = JSON.parse(atob(payload))
+
+  useEffect(() => {
+    let payload = accessToken?.split(".")[1];
+    if (!payload) return;
+    let decodedPayload = JSON.parse(atob(payload));
 
     setUser({
-      ...decodedPayload
-    })
-  }, [accessToken])
+      ...decodedPayload,
+    });
+  }, [accessToken]);
 
   useEffect(() => {
     const updateFavCount = () => {
-      const favoriteData = JSON.parse(localStorage.getItem("favoriteData")) || [];
+      const favoriteData =
+        JSON.parse(localStorage.getItem("favoriteData")) || [];
       setFavCount(favoriteData.length);
     };
     const updateCartItems = () => {
@@ -37,6 +43,7 @@ function TopBar() {
       setCartCount(cartData.length);
     };
 
+    // Update favCount on component mount and when favoritesUpdated event is dispatched
     updateFavCount();
     window.addEventListener("favoritesUpdated", updateFavCount);
 
@@ -58,17 +65,18 @@ function TopBar() {
   };
 
   const handleSignOut = () => {
-    setUser(null)
-    localStorage.removeItem("accessToken")
-    navigate()
-  }
+    setUser(null);
+    localStorage.removeItem("accessToken");
+    navigate();
+  };
 
   const handleFavListBtn = () => {
-    if (user==null) {
+    if (user == null) {
       navigate("/sign/in");
     } else {
-      navigate("/favorites"); }
-  }
+      navigate("/favorites");
+    }
+  };
 
   const handleAddToCart = () => {
     if (user==null) {
@@ -79,40 +87,70 @@ function TopBar() {
 
   const handleHome = () => {
     navigate("/home");
-  }
+  };
 
   return (
-      <div className="TopBar">
-        <img src={logo} alt="logo" style={{height: '100%', width: 'auto'}} onClick={handleHome} />
-        <section className="SearchBar">
-          <input
-              className="SearchInput"
-              placeholder="Nhập sản phẩm bạn muốn tìm"
-          />
-          <button className="SearchBtn">
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </section>
 
-        <section className="Misc">
-          <FontAwesomeIcon className="Cart" icon={faCartShopping} onClick={handleAddToCart} />
-          <span className="CartNum">{cartCount}</span>
-          <FontAwesomeIcon className="Fav" icon={faHeart} onClick={handleFavListBtn}/>
-          <span className="FavNum">{favCount}</span>
-        </section>
-        {(user && (
+    <div className="TopBar">
+      <img
+        src={logo}
+        alt="logo"
+        style={{ height: "100%", width: "auto" }}
+        onClick={handleHome}
+      />
+      <section className="SearchBar">
+        <input
+          onChange={(e) => setData({...data, keyword: e.target.value})}
+          className="SearchInput"
+          placeholder="Nhập sản phẩm bạn muốn tìm"
+        />
+        <button
+          className="SearchBtn"
+          onClick={() => {
+            if (data.updateSearch){
+              data.updateSearch()
+            }
+            navigate("/search");
+          }}
+        >
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </button>
+      </section>
+
+      <section className="Misc">
+        <FontAwesomeIcon className="Cart" icon={faCartShopping} />
+        <span className="CartNum">0</span>
+        <FontAwesomeIcon
+          className="Fav"
+          icon={faHeart}
+          onClick={handleFavListBtn}
+        />
+        <span className="FavNum">{favCount}</span>
+      </section>
+      {(user && (
         <section className="User">
           <Dropdown>
             <Dropdown.Toggle variant="primary" id="dropdown-basic">
-
-              {(!!user.firstName && !!user.lastName) && (user.firstName + " " + user.lastName).toUpperCase()}
+              {!!user.firstName &&
+                !!user.lastName &&
+                (user.firstName + " " + user.lastName).toUpperCase()}
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item onClick={()=>navigate("/home")}>Trang chủ</Dropdown.Item>
-              {user.isAdmin && <Dropdown.Item onClick={()=>navigate("/dashboard")}>Dashboard</Dropdown.Item>}
-              <Dropdown.Item onClick={()=>navigate("/info/me")}>Thông tin</Dropdown.Item>
-              <Dropdown.Item onClick={()=>navigate("/info/me")}>Đổi mật khẩu</Dropdown.Item>
+              <Dropdown.Item onClick={() => navigate("/home")}>
+                Trang chủ
+              </Dropdown.Item>
+              {user.isAdmin && (
+                <Dropdown.Item onClick={() => navigate("/dashboard")}>
+                  Dashboard
+                </Dropdown.Item>
+              )}
+              <Dropdown.Item onClick={() => navigate("/info/me")}>
+                Thông tin
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => navigate("/info/me")}>
+                Đổi mật khẩu
+              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleSignOut}>Đăng xuất</Dropdown.Item>
             </Dropdown.Menu>
@@ -136,9 +174,7 @@ function TopBar() {
           </Button>
         </section>
       )}
-
-
-      </div>
+    </div>
   );
 }
 

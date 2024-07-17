@@ -24,6 +24,7 @@ apiRouter.get("/auth/me", authMe_1.authMeGet);
 apiRouter.post("/auth/me", authMe_1.authMePost);
 apiRouter.get("/products/:page", product_1.productGet);
 apiRouter.get("/products", product_1.productGetPagination);
+apiRouter.get("/search", product_1.productGetSearch);
 apiRouter.post("/auth/me/change_password", changePassword_1.changePassword);
 apiRouter.post("/auth/products/add", isAdmin_1.isAdmin, product_1.addProductPost);
 apiRouter.post("/auth/products/update", isAdmin_1.isAdmin, product_1.updateProductPost);
