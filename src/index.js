@@ -64,11 +64,6 @@ const router = createBrowserRouter(
             </Route>
 
 
-            <Route>
-                <Route path="/watch/:id" element={<WatchDetail/>}/>
-                <Route path="/favorites" element={<FavoriteWatches/>}/>
-            </Route>
-
             <Route path="/" element={<App/>}>
                 <Route path="watch-list" element={<WatchList/>}/>
                 <Route path="/favorites" element={<FavoriteWatches/>}/>

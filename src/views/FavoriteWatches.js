@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import TopBar from "../components/TopBar";
 import MyToast from "../components/MyToast";
 import Footer from "../components/Footer";
+import { addToCart } from "../components/addToCart";
 
 const FavoriteWatches = () => {
     const [favoriteData, setFavoriteData] = useState(JSON.parse(localStorage.getItem("favoriteData")) || []);
@@ -31,8 +32,19 @@ const FavoriteWatches = () => {
         navigate(`/watch-detail/${watch.id}`, { state: { watch } });
     };
 
-    const handleAddToCart = () => {
-        // Add to cart logic here
+    const handleAddToCart = (watch) => {
+        const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+        const updatedCart = [...cartData, watch];
+        localStorage.setItem("cartData", JSON.stringify(updatedCart));
+        showToast(`${watch.name} đã được thêm vào giỏ hàng!`, "Thành công", true);
+        window.dispatchEvent(new Event("cartUpdated"));
+    };
+
+    const handleBuyNow = (watch) => {
+        localStorage.removeItem('checkoutItem')
+        localStorage.setItem('checkoutItem', JSON.stringify(watch));
+        navigate('/buynow');
+        //buynow();
     };
 
     const handleRemoveFromFav = (watch) => {
@@ -78,13 +90,13 @@ const FavoriteWatches = () => {
                                     </Card.Text>
                                 </Card.Body>
                                 <Card.Footer>
-                                    <Button variant="primary" onClick={handleAddToCart}>
+                                    <Button variant="primary" onClick={()=>handleAddToCart(v)}>
                                         <FontAwesomeIcon icon={faShoppingCart}/>
                                     </Button>
                                     <Button variant="danger" onClick={() => handleRemoveFromFav(v)}>
                                         <FontAwesomeIcon icon={faMinus}/>
                                     </Button>
-                                    <Button className="BuyBtn" variant="warning">
+                                    <Button onClick={()=>handleBuyNow(v)} className="BuyBtn" variant="warning">
                                         Mua ngay
                                     </Button>
                                 </Card.Footer>
