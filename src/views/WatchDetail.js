@@ -9,6 +9,7 @@ import '../assets/styles/WatchDetail.scss';
 import MyToast from "../components/MyToast";
 import { useNavigate } from "react-router-dom";
 import { addToFavorites } from '../components/addToFavoriteUtil';
+import {addToCart} from "../components/addToCart";
 
 const WatchDetail = () => {
     const [accessToken, setAccessToken] = useState(localStorage.getItem("accessToken"))
@@ -51,6 +52,17 @@ const WatchDetail = () => {
         addToFavorites(watch, user, favoriteData, setFavoriteData, showToast, navigate);
     };
 
+    const handleAddToCart = () => {
+        addToCart(watch, user, favoriteData, setFavoriteData, showToast, navigate);
+    };
+
+    const handleBuyNow = () => {
+        localStorage.setItem('checkoutItem', JSON.stringify(watch));
+        navigate('buynow');
+        //buynow();
+    };
+
+
 
     return (
         <div>
@@ -72,13 +84,13 @@ const WatchDetail = () => {
                     </div>
                 </div>
                 <div className="actions">
-                    <Button variant="primary">
+                    <Button variant="primary" onClick={() => handleAddToCart()}>
                         <FontAwesomeIcon icon={faShoppingCart}/> Thêm vào vỏ hàng
                     </Button>
                     <Button variant="danger" onClick={() => handleAddToFavorites(watch)}>
                         <FontAwesomeIcon icon={faHeart}/>  Yêu thích
                     </Button>
-                    <Button className="BuyBtn" variant="warning">
+                    <Button className="BuyBtn" variant="warning" onClick={handleBuyNow}>
                         Mua ngay
                     </Button>
                 </div>

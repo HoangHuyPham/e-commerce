@@ -17,8 +17,10 @@ function TopBar() {
   );
   const [user, setUser] = useState(null);
   const [favCount, setFavCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);
+
   const [data, setData] = useContext(AppContext);
-  
+
 
   useEffect(() => {
     let payload = accessToken?.split(".")[1];
@@ -36,14 +38,21 @@ function TopBar() {
         JSON.parse(localStorage.getItem("favoriteData")) || [];
       setFavCount(favoriteData.length);
     };
+    const updateCartItems = () => {
+      const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+      setCartCount(cartData.length);
+    };
 
     // Update favCount on component mount and when favoritesUpdated event is dispatched
     updateFavCount();
     window.addEventListener("favoritesUpdated", updateFavCount);
 
-    // Cleanup event listener on component unmount
+    updateCartItems();
+    window.addEventListener("cartUpdated", updateCartItems);
+
     return () => {
       window.removeEventListener("favoritesUpdated", updateFavCount);
+      window.removeEventListener("cartUpdated", updateCartItems);
     };
   }, []);
 
@@ -69,12 +78,19 @@ function TopBar() {
     }
   };
 
+  const handleAddToCart = () => {
+    if (user==null) {
+      navigate("/sign/in");
+    } else {
+      navigate("/cart"); }
+  };
+
   const handleHome = () => {
     navigate("/home");
   };
-  
+
   return (
-  
+
     <div className="TopBar">
       <img
         src={logo}
@@ -102,8 +118,8 @@ function TopBar() {
       </section>
 
       <section className="Misc">
-        <FontAwesomeIcon className="Cart" icon={faCartShopping} />
-        <span className="CartNum">0</span>
+        <FontAwesomeIcon onClick={handleAddToCart} className="Cart" icon={faCartShopping} />
+        <span className="CartNum">{cartCount}</span>
         <FontAwesomeIcon
           className="Fav"
           icon={faHeart}

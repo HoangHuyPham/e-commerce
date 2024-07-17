@@ -90,6 +90,17 @@ const WatchList = () => {
     updatePagination();
   }, []);
 
+  const addToCart = (watch) => {
+    if (user == null) {
+      navigate("/sign/in");
+    } else {
+      const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
+      const updatedCart = [...cartData, watch];
+      localStorage.setItem("cartData", JSON.stringify(updatedCart));
+      showToast(`${watch.name} đã được thêm vào giỏ hàng!`, "Thành công", true);
+      window.dispatchEvent(new Event("cartUpdated"));
+    }
+  };
   const updatePagination = async () => {
     try {
       await fetch(`http://localhost:3001/api/v1/products`, {
@@ -145,8 +156,14 @@ const WatchList = () => {
     }
   };
 
+
   const handleWatchDetail = (watch) => {
     navigate(`/watch-detail/${watch.id}`, { state: { watch } });
+  };
+
+  const handleBuyNow = (watch) => {
+    localStorage.setItem('buyNowItem', JSON.stringify(watch));
+    navigate('/buynow');
   };
 
   const showToast = (content, info, success) => {
@@ -178,14 +195,14 @@ const WatchList = () => {
                       <Card.Text>{watch.price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</Card.Text>
                     </Card.Body>
                     <Card.Footer>
-                      <Button variant="primary"><FontAwesomeIcon icon={faShoppingCart} /></Button>
+                      <Button onClick={()=>addToCart(watch)} variant="primary"><FontAwesomeIcon icon={faShoppingCart} /></Button>
                       <Button
                           variant="danger"
                           onClick={() => addToFavorites(watch)}
                       >
                         <FontAwesomeIcon icon={faHeart} />
                       </Button>
-                      <Button className="BuyBtn" variant="warning">Mua ngay</Button>
+                      <Button onClick={()=>handleBuyNow(watch)} className="BuyBtn" variant="warning">Mua ngay</Button>
                     </Card.Footer>
                   </Card>
               ))
