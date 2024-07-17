@@ -31,9 +31,9 @@ apiRouter.get("/products", productGetPagination)
 
 apiRouter.post("/auth/me/change_password", changePassword)
 
-apiRouter.post("/products/add" ,isAdmin, addProductPost)
-apiRouter.post("/products/update" ,isAdmin, updateProductPost)
-apiRouter.post("/products/delete" ,isAdmin, deleteProductPost)
+apiRouter.post("/auth/products/add" ,isAdmin, addProductPost)
+apiRouter.post("/auth/products/update" ,isAdmin, updateProductPost)
+apiRouter.post("/auth/products/delete" ,isAdmin, deleteProductPost)
 apiRouter.post("/auth/upload/preview/:id", isAdmin, multerFilter, limitSize, uploadPreview)
 apiRouter.post("/auth/upload/avatar", multerFilter, limitSize, uploadAvatar)
 

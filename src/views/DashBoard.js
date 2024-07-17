@@ -10,6 +10,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import "../assets/styles/App.scss";
 import MyToast from "../components/MyToast";
 import { ResponseStatus } from "../ResponseStatus";
+import NotFound from "./NotFound";
 
 function DashBoard() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ function DashBoard() {
   useEffect(() => {
     updateInfo();
   }, []);
+
 
   const updateInfo = async () => {
     try {
@@ -37,10 +39,9 @@ function DashBoard() {
             data.status === ResponseStatus.EXPIRED_TOKEN ||
             data.status === ResponseStatus.UNAUTHORIZED
           ) {
-            navigate("/sign/in");
+            navigate("sign/in");
             return;
           }
-
           setUserInfo(data.data);
         })
         .catch((err) => {
@@ -54,7 +55,7 @@ function DashBoard() {
 
   return (
     <>
-      <MyToast data={dataToast} />
+      {((userInfo?.isAdmin) && (<><MyToast data={dataToast} />
       <div className="DashBoardPage">
         <div className="Left">
           <h1>Dashboard</h1>
@@ -103,7 +104,8 @@ function DashBoard() {
         <div className="Right">
           <Outlet/>
         </div>
-      </div>
+      </div></>)) || <NotFound title={"Bạn không có quyền truy cập trang này"}/>}
+      
     </>
   );
 }

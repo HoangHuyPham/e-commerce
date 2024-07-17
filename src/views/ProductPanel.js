@@ -54,7 +54,7 @@ function ProductPanel() {
   const updateTable = () => {
     products.map((product, k) => {
       try {
-        fetch(`http://localhost:3001/api/v1/products/update`, {
+        fetch(`http://localhost:3001/api/v1/auth/products/update`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -68,9 +68,28 @@ function ProductPanel() {
               data.status === ResponseStatus.EXPIRED_TOKEN ||
               data.status === ResponseStatus.UNAUTHORIZED
             ) {
-              navigate("/sign/in");
+              navigate("sign/in");
               return;
             }
+            if (
+              data.status === ResponseStatus.UNAUTHENTICATE
+            ) {
+              setDataToast([
+                {
+                  id: new Date().getTime(),
+                  success: false,
+                  info: "Thất bại",
+                  content: "Bạn không có quyền thực hiện hành động này",
+                  show: true,
+                },
+              ]);
+              setTimeout(() => {
+                navigate("home");
+              }, 2000);
+              
+              return;
+            }
+
             setTimeout(() => {
               setLoading(false);
               setDataToast([
@@ -94,7 +113,7 @@ function ProductPanel() {
           });
       } catch (error) {
         console.log(error);
-        navigate("/sign/in");
+        navigate("sign/in");
       }
       return product;
     });
@@ -111,7 +130,7 @@ function ProductPanel() {
             data.status === ResponseStatus.EXPIRED_TOKEN ||
             data.status === ResponseStatus.UNAUTHORIZED
           ) {
-            navigate("/sign/in");
+            navigate("sign/in");
             return;
           }
           setPagination({ ...data.data });
@@ -124,7 +143,7 @@ function ProductPanel() {
         });
     } catch (error) {
       console.error(error);
-      navigate("/sign/in");
+      navigate("sign/in");
     }
   };
 
@@ -148,7 +167,7 @@ function ProductPanel() {
             data.status === ResponseStatus.EXPIRED_TOKEN ||
             data.status === ResponseStatus.UNAUTHORIZED
           ) {
-            navigate("/sign/in");
+            navigate("sign/in");
             return;
           }
           setProducts([...data.data]);
@@ -162,7 +181,7 @@ function ProductPanel() {
         });
     } catch (error) {
       console.error(error);
-      navigate("/sign/in");
+      navigate("sign/in");
     }
   };
 
@@ -180,7 +199,7 @@ function ProductPanel() {
 
   const handleDeleteProduct = (id) => {
     try {
-      fetch(`http://localhost:3001/api/v1/products/delete`, {
+      fetch(`http://localhost:3001/api/v1/auth/products/delete`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -194,7 +213,26 @@ function ProductPanel() {
             data.status === ResponseStatus.EXPIRED_TOKEN ||
             data.status === ResponseStatus.UNAUTHORIZED
           ) {
-            navigate("/sign/in");
+            navigate("sign/in");
+            return;
+          }
+
+          if (
+            data.status === ResponseStatus.UNAUTHENTICATE
+          ) {
+            setDataToast([
+              {
+                id: new Date().getTime(),
+                success: false,
+                info: "Thất bại",
+                content: "Bạn không có quyền thực hiện hành động này",
+                show: true,
+              },
+            ]);
+            setTimeout(() => {
+              navigate("home");
+            }, 2000);
+            
             return;
           }
           getProduct().then(()=>updatePagination());
@@ -228,13 +266,13 @@ function ProductPanel() {
         });
     } catch (error) {
       console.error(error);
-      navigate("/sign/in");
+      navigate("sign/in");
     }
   };
 
   const handleUploadNewProduct = () => {
     try {
-      fetch(`http://localhost:3001/api/v1/products/add`, {
+      fetch(`http://localhost:3001/api/v1/auth/products/add`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -248,7 +286,26 @@ function ProductPanel() {
             data.status === ResponseStatus.EXPIRED_TOKEN ||
             data.status === ResponseStatus.UNAUTHORIZED
           ) {
-            navigate("/sign/in");
+            navigate("sign/in");
+            return;
+          }
+
+          if (
+            data.status === ResponseStatus.UNAUTHENTICATE
+          ) {
+            setDataToast([
+              {
+                id: new Date().getTime(),
+                success: false,
+                info: "Thất bại",
+                content: "Bạn không có quyền thực hiện hành động này",
+                show: true,
+              },
+            ]);
+            setTimeout(() => {
+              navigate("home");
+            }, 2000);
+            
             return;
           }
 
@@ -290,7 +347,7 @@ function ProductPanel() {
         });
     } catch (error) {
       console.error(error);
-      navigate("/sign/in");
+      navigate("sign/in");
     }
   };
 
@@ -329,7 +386,7 @@ function ProductPanel() {
             data.status === ResponseStatus.EXPIRED_TOKEN ||
             data.status === ResponseStatus.UNAUTHORIZED
           ) {
-            navigate("/sign/in");
+            navigate("sign/in");
             return;
           }
 
@@ -340,7 +397,7 @@ function ProductPanel() {
         });
     } catch (error) {
       console.error(error);
-      navigate("/sign/in");
+      navigate("sign/in");
     }
   };
   console.log("re-ren")
